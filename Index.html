@@ -35,7 +35,7 @@
   --t-steel:   #7a7a7a; --t-steel-fg:#101010;
   --t-mystic:  #ee33ff; --t-mystic-fg:#2a0030;
   --t-fairy:   #5c0f73; --t-fairy-fg:#f5e6fa;
-  --t-rock:    #f5da8c; --t-rock-fg:#3a2c05;
+  --t-crystal: #2fb8cf; --t-crystal-fg:#02232b;
   --t-earth:   #8a7530; --t-earth-fg:#fbf4de;
   --t-cosmic:  #7a6ba6; --t-cosmic-fg:#fbf8ff;
   --t-insect:  #8fbf6a; --t-insect-fg:#16280c;
@@ -363,7 +363,7 @@ code{ font-family: var(--mono); background: var(--ink-4); padding:1px 5px; borde
 .t-steel{background:var(--t-steel);color:var(--t-steel-fg);}
 .t-mystic{background:var(--t-mystic);color:var(--t-mystic-fg);}
 .t-fairy{background:var(--t-fairy);color:var(--t-fairy-fg);}
-.t-rock{background:var(--t-rock);color:var(--t-rock-fg);}
+.t-crystal{background:var(--t-crystal);color:var(--t-crystal-fg);}
 .t-earth{background:var(--t-earth);color:var(--t-earth-fg);}
 .t-cosmic{background:var(--t-cosmic);color:var(--t-cosmic-fg);}
 .t-insect{background:var(--t-insect);color:var(--t-insect-fg);}
@@ -571,7 +571,22 @@ ol.steps li strong{ color: var(--parchment); }
 .stat-bar-row{ display:grid; grid-template-columns: 90px 1fr 40px; align-items:center; gap:12px; margin-bottom:9px; font-size:.82rem; }
 .stat-bar-row .lbl{ color: var(--parchment-dim); font-family: var(--mono); font-size:.72rem; }
 .stat-bar-row .track{ height:7px; background: var(--ink-4); border-radius:4px; overflow:hidden; }
-.stat-bar-row .fill{ height:100%; background: var(--accent); border-radius:4px; }
+/* .fill is a <span>, so it must be display:block or its width/height are ignored */
+.stat-bar-row .fill{
+  display:block;
+  height:100%;
+  width: var(--w, 0%);
+  background: var(--bar, var(--accent));
+  border-radius:4px;
+  animation: stat-grow .7s cubic-bezier(.2,.7,.2,1) both;
+}
+@keyframes stat-grow{ from{ width:0; } to{ width: var(--w, 0%); } }
+.stat-bar-row .fill.s-hp   { --bar:#4ecb6a; }  /* green */
+.stat-bar-row .fill.s-atk  { --bar:#e5484d; }  /* red */
+.stat-bar-row .fill.s-def  { --bar:#f28c28; }  /* orange */
+.stat-bar-row .fill.s-spatk{ --bar:#6ecbf5; }  /* light blue */
+.stat-bar-row .fill.s-spdef{ --bar:#3f5fd8; }  /* dark blue */
+.stat-bar-row .fill.s-spd  { --bar:#f6d53c; }  /* yellow */
 .stat-bar-row .val{ font-family: var(--mono); color: var(--parchment-dim); text-align:right; }
 
 .modal-abilities{ display:flex; flex-direction:column; gap:10px; }
@@ -925,7 +940,7 @@ const TYPES = [
   { id: 169, key: "steel",   name: "Steel" },
   { id: 170, key: "mystic",  name: "Mystic" },
   { id: 171, key: "fairy",   name: "Fairy" },
-  { id: 172, key: "rock",    name: "Rock" },
+  { id: 172, key: "crystal", name: "Crystal" },
   { id: 173, key: "earth",   name: "Earth" },
   { id: 174, key: "cosmic",  name: "Cosmic" },
   { id: 175, key: "insect",  name: "Insect" },
@@ -1015,17 +1030,33 @@ function wireSearch(inputId, itemSelector, getText){
 // file next to this HTML file, e.g.  img:"images/emberkit.png"
 // Leave it off (or delete it) to keep showing the placeholder tile.
 const SPECIES = [
-  { id:"???", name:"Flaranda", types:["fire","Mystic"], desc:"The Dancer Mystorian", stub:false,
-    stats:{hp:44,atk:58,def:40,spatk:52,spdef:41,spd:66}, abilities:["Scout","Glutten","Dancer"] /*, img:"https://media.discordapp.net/attachments/1235712264607236117/1551499192709546035/Flaranda.png?ex=6ab231b9&is=6ab0e039&hm=5cb2291f3f913fc51817db8011a7098f75b022298cbf2248ea8344f742c38b3c&=&format=webp&quality=lossless&width=1423&height=1536" */ },
-  { id:"002", name:"Tidalen", types:["water","cosmic"], desc:"Drifts along ocean currents in loose formation with others of its kind, glowing faintly in sync.", stub:false,
-    stats:{hp:60,atk:35,def:48,spatk:64,spdef:58,spd:39}, abilities:["Riptide"] },
+  { id:"???", name:"Flaranda", types:["fire","mystic"], desc:"The Dancer Mystorian", stub:false,
+    stats:{hp:105,atk:98,def:62,spatk:98,spdef:62,spd:100}, abilities:["Scout","Glutten","Dancer"], img:"images/flaranda.png" },
+  { id:"???", name:"Dryrm", types:["earth","crystal"], desc:"The Worm Mystorian", stub:false,
+    stats:{hp:35,atk:87,def:30,spatk:41,spdef:60,spd:72}, abilities:["Scout","Trickster","Roadrunner"], img:"images/dryrm.png" },
+  { id:"???", name:"Crystyrm", types:["earth","crystal"], desc:"The Drill Mystorian", stub:false,
+    stats:{hp:72,atk:110,def:40,spatk:80,spdef:68,spd:90}, abilities:["Scout","Trickster","Roadrunner"], img:"images/crystyrm.png" },
+  { id:"???", name:"Moltin", types:["fire","steel"], desc:"The Molten Metal Mystorian", stub:false,
+    stats:{hp:50,atk:45,def:65,spatk:65,spdef:30,spd:30}, abilities:["Molten","Brute","Hellscape"], img:"images/moltin.png" },
+  { id:"???", name:"Iropyro", types:["fire","steel"], desc:"The Molten Metal Mystorian", stub:false,
+    stats:{hp:75,atk:80,def:90,spatk:90,spdef:50,spd:45}, abilities:["Molten","Brute","Hellscape"], img:"images/iropyro.png" },
+  { id:"???", name:"Mechasear", types:["fire","steel"], desc:"The Molten Metal Mystorian", stub:false,
+    stats:{hp:95,atk:90,def:120,spatk:110,spdef:65,spd:60}, abilities:["Molten","Brute","Hellscape"], img:"images/mechasear.png" },
+
+  { id:"???", name:"Frostefeu", types:["fire","frost"], desc:"The Half Hot Mystorian", stub:false,
+    stats:{hp:75,atk:45,def:40,spatk:30,spdef:30,spd:20}, abilities:["Coldfront","Thick Skin","Hellscape"], img:"images/frostefeu.png" },
+  { id:"???", name:"Singill", types:["fire","frost"], desc:"The Half Cold Mystorian", stub:false,
+    stats:{hp:105,atk:65,def:70,spatk:65,spdef:35,spd:35}, abilities:["Coldfront","Thick Skin","Hellscape"], img:"images/singill.png" },
+  { id:"???", name:"Infernammoth", types:["fire","frost"], desc:"The Apex Mystorian", stub:false,
+    stats:{hp:125,atk:85,def:105,spatk:115,spdef:50,spd:50}, abilities:["Coldfront","Fur Coat","Hellscape"], img:"images/infernammoth.png" },
+
   { id:"003", name:"—", types:["plant"], stub:true },
   { id:"004", name:"—", types:["spark"], stub:true },
   { id:"005", name:"—", types:["dark","ghost"], stub:true },
   { id:"006", name:"—", types:["steel"], stub:true },
   { id:"007", name:"—", types:["mystic"], stub:true },
   { id:"008", name:"—", types:["insect"], stub:true },
-  { id:"009", name:"—", types:["rock","earth"], stub:true },
+  { id:"009", name:"—", types:["crystal","earth"], stub:true },
   { id:"010", name:"—", types:["flying"], stub:true },
   { id:"011", name:"—", types:["combat"], stub:true },
   { id:"012", name:"—", types:["frost"], stub:true },
@@ -1037,6 +1068,15 @@ function chipsFor(types){
   }).join("");
 }
 
+/* Swaps a broken <img> for a labelled placeholder. Built with DOM calls (not an
+   inline string) so quotes in the font names can't break the onerror attribute. */
+function imgFallback(img){
+  const box = document.createElement("div");
+  box.style.cssText = "background:var(--ink-4);color:var(--parchment-dim-2);display:flex;align-items:center;justify-content:center;flex-direction:column;width:100%;height:100%;font-family:var(--mono);font-size:12px;text-align:center;padding:8px;";
+  box.textContent = "image not found: " + img.getAttribute("src");
+  img.replaceWith(box);
+}
+
 /* Renders a creature's picture. If the species object has an `img` field
    (a path to a real image file, e.g. "images/emberkit.png"), that image is
    shown. Otherwise it falls back to a placeholder tile tinted by the
@@ -1044,10 +1084,9 @@ function chipsFor(types){
    function, so adding real art is just adding `img` to a species entry. */
 function creatureArt(species, uid){
   if (species.img) {
-    const fallback = "background:var(--ink-4);color:var(--parchment-dim-2);display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-family:'IBM Plex Mono',monospace;font-size:12px;text-align:center;padding:8px;";
     return `<img src="${species.img}" alt="${species.stub ? 'Unnamed species' : species.name}"
                  style="width:100%;height:100%;object-fit:cover;display:block;"
-                 onerror="this.outerHTML='&lt;div style=&quot;${fallback}&quot;&gt;image not found:<br>${species.img}&lt;/div&gt;';">`;
+                 onerror="imgFallback(this)">`;
   }
   const c1 = `var(--t-${species.types[0]})`;
   const c2 = species.types[1] ? `var(--t-${species.types[1]})` : `var(--ink-4)`;
@@ -1076,10 +1115,10 @@ function creatureArt(species, uid){
 
 function renderSpecies(list){
   document.getElementById("species-grid").innerHTML = list.map(s => `
-    <div class="entry" data-id="${s.id}" tabindex="0" role="button"
+    <div class="entry" data-idx="${SPECIES.indexOf(s)}" tabindex="0" role="button"
          aria-label="View details for ${s.stub ? 'unnamed species ' + s.id : s.name}"
          data-name="${s.name.toLowerCase()}" data-types="${s.types.join(',')}">
-      <div class="art">${creatureArt(s, s.id)}</div>
+      <div class="art">${creatureArt(s, SPECIES.indexOf(s))}</div>
       <span class="num">No. ${s.id}</span>
       <h3>${s.stub ? "Unnamed species" : s.name}</h3>
       <div class="chips">${chipsFor(s.types)}</div>
@@ -1098,11 +1137,11 @@ wireSearch("species-search", "#species-grid .entry", el => el.dataset.name + " "
 const STAT_LABELS = [["hp","HP"],["atk","ATK"],["def","DEF"],["spatk","SP.ATK"],["spdef","SP.DEF"],["spd","SPD"]];
 const STAT_MAX = 150; // scale for the bar fill — raise once real stat ranges exist
 
-function openSpeciesModal(id){
-  const s = SPECIES.find(sp => sp.id === id);
+function openSpeciesModal(idx){
+  const s = SPECIES[idx];
   if (!s) return;
 
-  document.getElementById("modal-art").innerHTML = creatureArt(s, "modal-" + s.id);
+  document.getElementById("modal-art").innerHTML = creatureArt(s, "modal-" + idx);
   document.getElementById("modal-num").textContent = `No. ${s.id}`;
   document.getElementById("modal-name").textContent = s.stub ? "Unnamed species" : s.name;
   document.getElementById("modal-chips").innerHTML = chipsFor(s.types);
@@ -1115,14 +1154,14 @@ function openSpeciesModal(id){
         return `
           <div class="stat-bar-row">
             <span class="lbl">${label}</span>
-            <span class="track"><span class="fill" style="width:${pct}%;"></span></span>
+            <span class="track"><span class="fill s-${key}" style="--w:${pct}%;"></span></span>
             <span class="val">${v}</span>
           </div>`;
       }).join("")
     : STAT_LABELS.map(([key,label]) => `
         <div class="stat-bar-row">
           <span class="lbl">${label}</span>
-          <span class="track"><span class="fill" style="width:0%;"></span></span>
+          <span class="track"><span class="fill s-${key}" style="--w:0%;"></span></span>
           <span class="val">—</span>
         </div>`).join("");
 
@@ -1154,12 +1193,12 @@ function closeSpeciesModal(){
 
 document.getElementById("species-grid").addEventListener("click", (e) => {
   const card = e.target.closest(".entry");
-  if (card) openSpeciesModal(card.dataset.id);
+  if (card) openSpeciesModal(Number(card.dataset.idx));
 });
 document.getElementById("species-grid").addEventListener("keydown", (e) => {
   if (e.key !== "Enter" && e.key !== " ") return;
   const card = e.target.closest(".entry");
-  if (card){ e.preventDefault(); openSpeciesModal(card.dataset.id); }
+  if (card){ e.preventDefault(); openSpeciesModal(Number(card.dataset.idx)); }
 });
 document.getElementById("modal-close").addEventListener("click", closeSpeciesModal);
 document.getElementById("species-modal").addEventListener("click", (e) => {
