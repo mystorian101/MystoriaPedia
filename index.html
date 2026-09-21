@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mystorian Uprising — Field Guide</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ==========================================================================
+   Mystorian Uprising — Field Guide (single-file build)
+   ========================================================================== */
+
+:root{
+  --ink:        #08090f;
+  --ink-2:      #0f111a;
+  --ink-3:      #161825;
+  --ink-4:      #1d2032;
+  --line:       #262a3c;
+  --line-soft:  #1c2032;
+  --parchment:  #ece6d6;
+  --parchment-dim: #9c98a6;
+  --parchment-dim-2: #726f7c;
+  --accent:     #d7a23e;
+  --accent-soft: rgba(215,162,62,0.14);
+  --accent-dim: #8a6a2c;
+
+  --t-fire:    #e0993b; --t-fire-fg:#1a1000;
+  --t-water:   #182a4c; --t-water-fg:#eef2fb;
+  --t-plant:   #3f5a33; --t-plant-fg:#eef4e6;
+  --t-spark:   #8a7328; --t-spark-fg:#fbf4de;
+  --t-light:   #3a3016; --t-light-fg:#fbf4de;
+  --t-dark:    #ffffff; --t-dark-fg:#0c0e16;
+  --t-steel:   #7a7a7a; --t-steel-fg:#101010;
+  --t-mystic:  #ee33ff; --t-mystic-fg:#2a0030;
+  --t-fairy:   #5c0f73; --t-fairy-fg:#f5e6fa;
+  --t-crystal: #2fb8cf; --t-crystal-fg:#02232b;
+  --t-earth:   #8a7530; --t-earth-fg:#fbf4de;
+  --t-cosmic:  #7a6ba6; --t-cosmic-fg:#fbf8ff;
+  --t-insect:  #8fbf6a; --t-insect-fg:#16280c;
+  --t-plague:  #8e1eff; --t-plague-fg:#f6ecff;
+  --t-myth:    #6fa8e8; --t-myth-fg:#0c1b30;
+  --t-ghost:   #4b3b72; --t-ghost-fg:#f0ecfa;
+  --t-flying:  #131c2e; --t-flying-fg:#e9edf7;
+  --t-combat:  #e89a93; --t-combat-fg:#3a0f0c;
+  --t-joke:    #7a2b28; --t-joke-fg:#fbe9e6;
+  --t-frost:   #5ff0f5; --t-frost-fg:#04292b;
+  --t-basic:   #2b2b2b; --t-basic-fg:#eeeeee;
+  --t-anomaly: #4a4a3a; --t-anomaly-fg:#e9dfa0;
+
+  --radius: 3px;
+  --serif: 'Spectral', Georgia, serif;
+  --sans: 'IBM Plex Sans', system-ui, sans-serif;
+  --mono: 'IBM Plex Mono', monospace;
+}
+
+*{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; scroll-padding-top: 24px; }
+
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior:auto; }
+  *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; }
+}
+
+body{
+  margin:0;
+  background:
+    radial-gradient(ellipse 1100px 620px at 12% -8%, rgba(215,162,62,0.10), transparent 60%),
+    radial-gradient(ellipse 800px 500px at 100% 10%, rgba(142,30,255,0.06), transparent 55%),
+    var(--ink);
+  color: var(--parchment);
+  font-family: var(--sans);
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+
+a{ color: var(--accent); text-decoration:none; }
+a:hover{ text-decoration:underline; }
+a:focus-visible, button:focus-visible, input:focus-visible{
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+code{ font-family: var(--mono); background: var(--ink-4); padding:1px 5px; border-radius:2px; font-size:.88em; }
+
+/* ---------- the type strip — the guide's one recurring motif ---------- */
+.type-strip{
+  display:flex;
+  height:6px;
+  width:100%;
+}
+.type-strip span{ flex:1; }
+
+/* ---------- layout shell ---------- */
+
+.shell{
+  display:grid;
+  grid-template-columns: 252px 1fr;
+  min-height:100vh;
+}
+
+.side{
+  border-right: 1px solid var(--line);
+  background: var(--ink-2);
+  padding: 30px 24px;
+  position: sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+  display:flex;
+  flex-direction:column;
+}
+
+.side .mark{
+  display:block;
+  font-family: var(--serif);
+  font-weight:600;
+  font-size:1.34rem;
+  color: var(--parchment);
+  letter-spacing:.01em;
+  line-height:1.15;
+  margin-bottom:4px;
+}
+.side .mark em{ color: var(--accent); font-style:normal; }
+
+.side .tagline{
+  display:block;
+  font-size:.76rem;
+  color: var(--parchment-dim-2);
+  margin-bottom: 30px;
+  font-family: var(--mono);
+}
+
+.side nav{ flex:1; }
+.side nav ul{ list-style:none; margin:0; padding:0; }
+.side nav li{ margin:0; }
+.side nav a{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color: var(--parchment-dim);
+  font-size:.94rem;
+  padding: 10px 10px 10px 14px;
+  border-radius: var(--radius);
+  margin-bottom:2px;
+  transition: color .15s ease, background-color .15s ease;
+}
+.side nav a::before{
+  content:"";
+  position:absolute; left:0; top:8px; bottom:8px;
+  width:2px;
+  background: transparent;
+  transition: background-color .15s ease;
+}
+.side nav a .i{
+  font-family: var(--mono);
+  font-size:.68rem;
+  color: var(--parchment-dim-2);
+  width:16px;
+}
+.side nav a:hover{ color: var(--parchment); text-decoration:none; background: rgba(255,255,255,0.03); }
+.side nav a.active{ color: var(--parchment); background: var(--accent-soft); }
+.side nav a.active::before{ background: var(--accent); }
+.side nav a.active .i{ color: var(--accent); }
+
+.side .side-foot{
+  margin-top:24px;
+  padding-top:16px;
+  border-top:1px solid var(--line);
+  font-size:.72rem;
+  color: var(--parchment-dim-2);
+  font-family: var(--mono);
+  line-height:1.7;
+}
+
+.main{ min-width:0; }
+
+.page-section{ padding: 90px 64px 10px; max-width:1180px; scroll-margin-top: 20px; }
+.page-section:first-of-type{ padding-top:0; }
+.page-section:last-of-type{ padding-bottom:80px; }
+
+.sec-head{ margin-bottom: 44px; max-width: 760px; }
+.eyebrow-note{
+  font-family: var(--mono);
+  font-size:.75rem;
+  color: var(--accent-dim);
+  margin: 0 0 12px;
+  letter-spacing:.02em;
+}
+.sec-head h1{
+  font-family: var(--serif);
+  font-size: 2.7rem;
+  font-weight:600;
+  margin: 0 0 16px;
+  color: var(--parchment);
+  line-height:1.1;
+}
+.sec-head p{
+  color: var(--parchment-dim);
+  font-size:1.03rem;
+  max-width: 62ch;
+}
+
+.block{ margin-bottom: 60px; }
+.block > h2{
+  font-family: var(--serif);
+  font-weight:600;
+  font-size:1.5rem;
+  color: var(--parchment);
+  margin: 0 0 6px;
+  padding-bottom:16px;
+  border-bottom: 1px solid var(--line);
+}
+.block > .block-note{
+  color: var(--parchment-dim);
+  font-size:.92rem;
+  margin: 14px 0 26px;
+  max-width: 64ch;
+}
+
+/* ---------- home hero ---------- */
+
+.hero{
+  padding: 84px 64px 0;
+  max-width:1180px;
+}
+.hero .kicker{
+  font-family: var(--mono);
+  font-size:.8rem;
+  color: var(--accent);
+  margin-bottom: 22px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.hero .kicker::before{
+  content:"";
+  width:22px; height:1px;
+  background: var(--accent-dim);
+  display:inline-block;
+}
+.hero h1{
+  font-family: var(--serif);
+  font-size: clamp(2.6rem, 6vw, 4.4rem);
+  line-height:1.02;
+  font-weight:600;
+  margin: 0 0 22px;
+  max-width: 13ch;
+  opacity:0;
+  transform: translateY(14px);
+  animation: rise .7s cubic-bezier(.2,.8,.2,1) .05s forwards;
+}
+.hero p.lede{
+  font-size:1.15rem;
+  color: var(--parchment-dim);
+  max-width: 54ch;
+  margin: 0 0 34px;
+  opacity:0;
+  transform: translateY(14px);
+  animation: rise .7s cubic-bezier(.2,.8,.2,1) .18s forwards;
+}
+@keyframes rise{ to{ opacity:1; transform:none; } }
+
+.stat-row{
+  display:flex;
+  border-top:1px solid var(--line);
+  margin-top: 8px;
+}
+.stat{
+  flex:1;
+  padding: 20px 24px 26px 0;
+  border-right: 1px solid var(--line);
+}
+.stat:last-child{ border-right:none; }
+.stat .n{
+  font-family: var(--serif);
+  font-size:2.2rem;
+  color: var(--parchment);
+  display:block;
+}
+.stat .l{
+  font-size:.78rem;
+  color: var(--parchment-dim-2);
+  font-family: var(--mono);
+}
+
+.card-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+.nav-card{
+  background: var(--ink-2);
+  padding: 24px;
+  display:block;
+  color: var(--parchment);
+  position:relative;
+  overflow:hidden;
+}
+.nav-card::after{
+  content:"";
+  position:absolute; left:0; right:0; top:0; height:3px;
+  background: var(--card-accent, var(--accent));
+  transform: scaleX(0);
+  transform-origin:left;
+  transition: transform .25s ease;
+}
+.nav-card:hover::after{ transform: scaleX(1); }
+.nav-card:hover{ background: var(--ink-3); text-decoration:none; }
+.nav-card .k{
+  font-family: var(--mono);
+  font-size:.72rem;
+  color: var(--accent);
+  display:block;
+  margin-bottom:10px;
+}
+.nav-card h3{
+  font-family: var(--serif);
+  margin:0 0 8px;
+  font-size:1.24rem;
+}
+.nav-card p{
+  margin:0;
+  font-size:.86rem;
+  color: var(--parchment-dim);
+}
+
+.note-box{
+  border:1px solid var(--line);
+  border-left: 2px solid var(--accent-dim);
+  padding: 18px 20px;
+  border-radius: var(--radius);
+  font-size:.87rem;
+  color: var(--parchment-dim);
+  background: var(--ink-2);
+}
+.note-box strong{ color: var(--parchment); }
+
+/* ---------- type chip / swatch ---------- */
+
+.chip{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size:.78rem;
+  font-weight:600;
+  font-family: var(--sans);
+  white-space:nowrap;
+  line-height:1.4;
+}
+.t-fire{background:var(--t-fire);color:var(--t-fire-fg);}
+.t-water{background:var(--t-water);color:var(--t-water-fg);}
+.t-plant{background:var(--t-plant);color:var(--t-plant-fg);}
+.t-spark{background:var(--t-spark);color:var(--t-spark-fg);}
+.t-light{background:var(--t-light);color:var(--t-light-fg);}
+.t-dark{background:var(--t-dark);color:var(--t-dark-fg);}
+.t-steel{background:var(--t-steel);color:var(--t-steel-fg);}
+.t-mystic{background:var(--t-mystic);color:var(--t-mystic-fg);}
+.t-fairy{background:var(--t-fairy);color:var(--t-fairy-fg);}
+.t-crystal{background:var(--t-crystal);color:var(--t-crystal-fg);}
+.t-earth{background:var(--t-earth);color:var(--t-earth-fg);}
+.t-cosmic{background:var(--t-cosmic);color:var(--t-cosmic-fg);}
+.t-insect{background:var(--t-insect);color:var(--t-insect-fg);}
+.t-plague{background:var(--t-plague);color:var(--t-plague-fg);}
+.t-myth{background:var(--t-myth);color:var(--t-myth-fg);}
+.t-ghost{background:var(--t-ghost);color:var(--t-ghost-fg);}
+.t-flying{background:var(--t-flying);color:var(--t-flying-fg);}
+.t-combat{background:var(--t-combat);color:var(--t-combat-fg);}
+.t-joke{background:var(--t-joke);color:var(--t-joke-fg);}
+.t-frost{background:var(--t-frost);color:var(--t-frost-fg);}
+.t-basic{background:var(--t-basic);color:var(--t-basic-fg);}
+.t-anomaly{background:var(--t-anomaly);color:var(--t-anomaly-fg); border:1px dashed var(--accent);}
+
+/* ---------- types section ---------- */
+
+.type-list{
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px,1fr));
+  gap:1px;
+  background: var(--line);
+  border:1px solid var(--line);
+}
+.type-tile{
+  background: var(--ink-2);
+  padding:17px 18px;
+  display:flex;
+  align-items:center;
+  gap:13px;
+  transition: background-color .15s ease;
+}
+.type-tile:hover{ background: var(--ink-3); }
+.type-tile .sw{
+  width:32px; height:32px;
+  border-radius: var(--radius);
+  flex:none;
+  border:1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.2);
+}
+.type-tile .name{ font-weight:600; font-size:.95rem; }
+.type-tile .idx{ font-family: var(--mono); font-size:.71rem; color: var(--parchment-dim-2); display:block; }
+
+.chart-wrap{ overflow-x:auto; border:1px solid var(--line); background: var(--ink-2); }
+table.chart{ border-collapse: collapse; font-size:.72rem; font-family: var(--mono); }
+table.chart th, table.chart td{ border:1px solid var(--line-soft); width: 30px; height: 30px; text-align:center; padding:0; }
+table.chart thead th{ background: var(--ink-3); position:sticky; top:0; z-index:2; }
+table.chart .corner{ position:sticky; left:0; top:0; z-index:3; background: var(--ink-3); font-family: var(--sans); font-size:.68rem; color:var(--parchment-dim-2); }
+table.chart th.rowhead{
+  position:sticky; left:0; z-index:1; background: var(--ink-3);
+  text-align:left; padding: 0 12px; white-space:nowrap; width:auto;
+  font-family: var(--sans); font-weight:600; font-size:.78rem;
+}
+table.chart .vert{ writing-mode: vertical-rl; transform: rotate(180deg); font-family: var(--sans); font-weight:600; font-size:.66rem; padding:6px 0; display:block; }
+table.chart td{ color: var(--parchment-dim-2); background: var(--ink-2); cursor:default; }
+table.chart td.self{ background: var(--ink-4); }
+table.chart tr:hover td, table.chart td:hover{ background: rgba(215,162,62,0.10); }
+table.chart th.rowhead.hl, table.chart th.vert.hl{ color: var(--accent); }
+
+.legend{ display:flex; flex-wrap:wrap; gap: 20px; margin-top:18px; font-size:.83rem; color: var(--parchment-dim); }
+.legend span{ font-family: var(--mono); color: var(--parchment); margin-right:4px; }
+
+/* ---------- toolbar ---------- */
+
+.toolbar{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom: 22px; }
+.toolbar input[type="search"]{
+  background: var(--ink-2);
+  border:1px solid var(--line);
+  color: var(--parchment);
+  padding: 10px 13px;
+  border-radius: var(--radius);
+  font-family: var(--sans);
+  font-size:.9rem;
+  min-width: 230px;
+}
+.toolbar input[type="search"]::placeholder{ color: var(--parchment-dim-2); }
+.filter-btn{
+  background: var(--ink-2);
+  border:1px solid var(--line);
+  color: var(--parchment-dim);
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size:.78rem;
+  font-family: var(--sans);
+  cursor:pointer;
+  transition: all .12s ease;
+}
+.filter-btn:hover{ color: var(--parchment); border-color: var(--accent-dim); }
+.filter-btn.active{ color: #100b02; background: var(--accent); border-color: var(--accent); font-weight:600; }
+.count-note{ font-family: var(--mono); font-size:.78rem; color: var(--parchment-dim-2); margin-left:auto; }
+
+/* ---------- data tables (moves) ---------- */
+
+.datatable{ width:100%; border-collapse: collapse; font-size:.88rem; }
+.datatable th{
+  text-align:left; font-family: var(--mono); font-weight:500; font-size:.72rem;
+  color: var(--parchment-dim-2); padding: 11px 15px; border-bottom: 1px solid var(--line); white-space:nowrap;
+}
+.datatable td{ padding: 13px 15px; border-bottom: 1px solid var(--line); vertical-align: middle; color: var(--parchment); }
+.datatable tbody tr:hover{ background: rgba(255,255,255,0.02); }
+.datatable .mvname{ font-weight:600; }
+.datatable .mvdesc{ color: var(--parchment-dim); font-size:.85rem; max-width:340px; }
+.datatable .num{ font-family: var(--mono); color: var(--parchment-dim-2); }
+.datatable .cat{ font-family: var(--mono); font-size:.72rem; color: var(--parchment-dim-2); }
+
+/* ---------- entries (species / abilities) ---------- */
+
+.entry-grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(232px, 1fr)); gap: 1px; background: var(--line); border:1px solid var(--line); }
+.entry{
+  background: var(--ink-2); padding: 18px 22px 22px; border-top: 3px solid var(--line);
+  transition: border-color .15s ease, background-color .15s ease;
+  cursor:pointer;
+}
+.entry:hover{ border-top-color: var(--accent-dim); background: var(--ink-3); }
+.entry:focus-visible{ outline: 2px solid var(--accent); outline-offset: -2px; }
+.entry .art{
+  width:100%; aspect-ratio: 4 / 3; border-radius: var(--radius);
+  overflow:hidden; margin-bottom:14px; background: var(--ink-4);
+  display:flex; align-items:center; justify-content:center;
+}
+.entry .art svg{ width:100%; height:100%; display:block; }
+.entry .num{ font-family: var(--mono); font-size:.72rem; color: var(--parchment-dim-2); }
+.entry h3{ font-family: var(--serif); margin: 7px 0 11px; font-size:1.18rem; }
+.entry .chips{ display:flex; gap:6px; margin-bottom:13px; flex-wrap:wrap; }
+.entry p{ margin:0; font-size:.85rem; color: var(--parchment-dim); }
+.entry .stub{ font-style:italic; color: var(--parchment-dim-2); }
+.entry .tap-note{
+  display:block; margin-top:12px; font-family: var(--mono); font-size:.68rem;
+  color: var(--parchment-dim-2); opacity:0; transition: opacity .15s ease;
+}
+.entry:hover .tap-note, .entry:focus-visible .tap-note{ opacity:1; }
+
+.ability-list{ border:1px solid var(--line); background: var(--ink-2); }
+.ability-row{ display:grid; grid-template-columns: 210px 1fr; gap: 22px; padding: 18px 20px; border-bottom: 1px solid var(--line); }
+.ability-row:last-child{ border-bottom:none; }
+.ability-row h3{ font-family: var(--serif); font-size:1.04rem; margin:0; color: var(--parchment); }
+.ability-row .tag{ display:block; font-family: var(--mono); font-size:.7rem; color: var(--accent-dim); margin-top:4px; }
+.ability-row p{ margin:0; color: var(--parchment-dim); font-size:.9rem; }
+.ability-row p.stub{ font-style:italic; color: var(--parchment-dim-2); }
+
+/* ---------- mechanics ---------- */
+
+.two-col{ display:grid; grid-template-columns: 1fr 1fr; gap: 44px; }
+.stat-block{ border:1px solid var(--line); background: var(--ink-2); }
+.stat-block-row{ display:flex; justify-content:space-between; gap: 16px; padding: 11px 17px; border-bottom:1px solid var(--line); font-size:.88rem; }
+.stat-block-row:last-child{ border-bottom:none; }
+.stat-block-row .v{ font-family: var(--mono); color: var(--parchment-dim-2); text-align:right; }
+
+ol.steps{ padding-left: 24px; margin:0; }
+ol.steps li{ margin-bottom: 15px; color: var(--parchment-dim); }
+ol.steps li strong{ color: var(--parchment); }
+
+/* ---------- species detail modal ---------- */
+
+.modal-backdrop{
+  position:fixed; inset:0; background: rgba(4,5,9,0.78);
+  backdrop-filter: blur(2px);
+  display:flex; align-items:flex-start; justify-content:center;
+  padding: 6vh 20px;
+  overflow-y:auto;
+  opacity:0; pointer-events:none;
+  transition: opacity .18s ease;
+  z-index: 50;
+}
+.modal-backdrop.open{ opacity:1; pointer-events:auto; }
+.modal{
+  background: var(--ink-2);
+  border:1px solid var(--line);
+  width:100%; max-width: 760px;
+  border-top: 3px solid var(--accent-dim);
+  transform: translateY(10px);
+  transition: transform .18s ease;
+}
+.modal-backdrop.open .modal{ transform:none; }
+.modal-top{
+  display:grid; grid-template-columns: 260px 1fr; gap:0;
+  border-bottom:1px solid var(--line);
+}
+.modal-art{
+  background: var(--ink-4);
+  display:flex; align-items:center; justify-content:center;
+  border-right: 1px solid var(--line);
+  min-height: 220px;
+}
+.modal-art svg{ width:100%; height:100%; display:block; }
+.modal-head{ padding: 24px 26px; position:relative; }
+.modal-close{
+  position:absolute; top:16px; right:16px;
+  background: transparent; border:1px solid var(--line); color: var(--parchment-dim);
+  width:30px; height:30px; border-radius: var(--radius); cursor:pointer;
+  font-family: var(--sans); font-size:1rem; line-height:1;
+}
+.modal-close:hover{ color: var(--parchment); border-color: var(--accent-dim); }
+.modal-head .num{ font-family: var(--mono); font-size:.75rem; color: var(--parchment-dim-2); }
+.modal-head h3{ font-family: var(--serif); font-size:1.7rem; margin: 6px 0 12px; padding-right:36px; }
+.modal-head .chips{ display:flex; gap:6px; flex-wrap:wrap; margin-bottom:16px; }
+.modal-head p{ margin:0; font-size:.92rem; color: var(--parchment-dim); }
+
+.modal-body{ padding: 22px 26px 26px; }
+.modal-body h4{
+  font-family: var(--mono); font-size:.72rem; text-transform:none;
+  color: var(--accent-dim); margin: 0 0 14px; letter-spacing:.02em;
+}
+.modal-section{ margin-bottom: 26px; }
+.modal-section:last-child{ margin-bottom:0; }
+
+.stat-bar-row{ display:grid; grid-template-columns: 90px 1fr 40px; align-items:center; gap:12px; margin-bottom:9px; font-size:.82rem; }
+.stat-bar-row .lbl{ color: var(--parchment-dim); font-family: var(--mono); font-size:.72rem; }
+.stat-bar-row .track{ height:7px; background: var(--ink-4); border-radius:4px; overflow:hidden; }
+/* .fill is a <span>, so it must be display:block or its width/height are ignored */
+.stat-bar-row .fill{
+  display:block;
+  height:100%;
+  width: var(--w, 0%);
+  background: var(--bar, var(--accent));
+  border-radius:4px;
+  animation: stat-grow .7s cubic-bezier(.2,.7,.2,1) both;
+}
+@keyframes stat-grow{ from{ width:0; } to{ width: var(--w, 0%); } }
+.stat-bar-row .fill.s-hp   { --bar:#4ecb6a; }  /* green */
+.stat-bar-row .fill.s-atk  { --bar:#e5484d; }  /* red */
+.stat-bar-row .fill.s-def  { --bar:#f28c28; }  /* orange */
+.stat-bar-row .fill.s-spatk{ --bar:#6ecbf5; }  /* light blue */
+.stat-bar-row .fill.s-spdef{ --bar:#3f5fd8; }  /* dark blue */
+.stat-bar-row .fill.s-spd  { --bar:#f6d53c; }  /* yellow */
+.stat-bar-row .val{ font-family: var(--mono); color: var(--parchment-dim); text-align:right; }
+
+.modal-abilities{ display:flex; flex-direction:column; gap:10px; }
+.modal-ability{ border:1px solid var(--line); padding:12px 14px; background: var(--ink); }
+.modal-ability .aname{ font-weight:600; font-size:.9rem; color: var(--parchment); }
+.modal-ability .adesc{ font-size:.82rem; color: var(--parchment-dim-2); margin-top:3px; }
+
+/* ---------- footer ---------- */
+
+footer.page-foot{
+  margin: 0 64px;
+  padding: 26px 0 60px;
+  border-top: 1px solid var(--line);
+  font-size:.78rem;
+  color: var(--parchment-dim-2);
+  font-family: var(--mono);
+  max-width:1180px;
+}
+
+@media (max-width: 880px){
+  .shell{ grid-template-columns: 1fr; }
+  .side{ position:relative; height:auto; }
+  .hero{ padding: 48px 22px 0; }
+  .page-section{ padding: 60px 22px 10px; }
+  footer.page-foot{ margin: 0 22px; }
+  .hero h1{ max-width:none; }
+  .two-col{ grid-template-columns: 1fr; }
+  .ability-row{ grid-template-columns: 1fr; gap:8px; }
+}
+</style>
+</head>
+<body>
+
+<div class="type-strip" id="strip-top"></div>
+
+<div class="shell">
+
+  <aside class="side">
+    <a class="mark" href="#home">Mystorian<br><em>Uprising</em></a>
+    <span class="tagline">unofficial field guide</span>
+    <nav>
+      <ul id="side-nav">
+        <li><a href="#home"><span class="i">00</span>Home</a></li>
+        <li><a href="#types"><span class="i">01</span>Type Chart</a></li>
+        <li><a href="#species"><span class="i">02</span>Speciesdex</a></li>
+        <li><a href="#moves"><span class="i">03</span>Movedex</a></li>
+        <li><a href="#abilities"><span class="i">04</span>Abilitydex</a></li>
+        <li><a href="#mechanics"><span class="i">05</span>Mechanics</a></li>
+      </ul>
+    </nav>
+    <div class="side-foot">
+      Community doc · work in progress<br>
+      single-file build · GitHub Pages ready
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- ============================= HOME ============================= -->
+    <section class="page-section" id="home" style="padding-top:0;">
+      <div class="hero">
+        <div class="kicker">FIELD GUIDE — VOLUME I</div>
+        <h1>Mystorian Uprising</h1>
+        <p class="lede">
+          A living reference for tamers: every type, move, ability, and creature
+          that has crawled, flown, or glitched its way into the Mystorium.
+          Most entries below are intentionally left blank — this guide grows
+          as the game does.
+        </p>
+        <div class="stat-row">
+          <div class="stat"><span class="n">22</span><span class="l">CORE TYPES</span></div>
+          <div class="stat"><span class="n">1</span><span class="l">ANOMALY CLASS</span></div>
+          <div class="stat"><span class="n">—</span><span class="l">SPECIES LOGGED</span></div>
+          <div class="stat"><span class="n">—</span><span class="l">MOVES LOGGED</span></div>
+        </div>
+      </div>
+
+      <div class="block" style="margin-top:56px;">
+        <h2>Where to start</h2>
+        <p class="block-note">Five sections make up the guide so far. Each one is a template — fill in what you know, leave the rest for later.</p>
+        <div class="card-grid">
+          <a class="nav-card" href="#types" style="--card-accent:var(--t-mystic);">
+            <span class="k">01</span><h3>Type Chart</h3>
+            <p>All 22 types with their colours, plus a blank effectiveness matrix ready for matchup data.</p>
+          </a>
+          <a class="nav-card" href="#species" style="--card-accent:var(--t-plant);">
+            <span class="k">02</span><h3>Speciesdex</h3>
+            <p>Every creature entry: typing, classification, and a short field description.</p>
+          </a>
+          <a class="nav-card" href="#moves" style="--card-accent:var(--t-fire);">
+            <span class="k">03</span><h3>Movedex</h3>
+            <p>Attacks and support moves, sortable by type and category, with power / accuracy / PP columns.</p>
+          </a>
+          <a class="nav-card" href="#abilities" style="--card-accent:var(--t-frost);">
+            <span class="k">04</span><h3>Abilitydex</h3>
+            <p>Passive traits creatures can carry into battle, and what each one is meant to do.</p>
+          </a>
+        </div>
+      </div>
+
+      <div class="block">
+        <h2>About this guide</h2>
+        <p class="block-note" style="margin-bottom:20px;">A few notes on how the guide is organised, for anyone editing it later.</p>
+        <div class="note-box">
+          <strong>Anomaly</strong> is kept separate from the 22-type matchup chart — treat it as a
+          rare / secret classification (event creatures, corrupted forms, etc.) rather than a type
+          with standard weaknesses and resistances, unless you decide otherwise.
+          <br><br>
+          <strong>Numbering</strong> on the type chart (163–184) is carried over from the internal
+          type-list spreadsheet so it's easy to cross-reference against the original source.
+          Species and move numbers are placeholders — renumber freely as the dex fills in.
+        </div>
+      </div>
+    </section>
+
+    <div class="type-strip"></div>
+
+    <!-- ============================= TYPES ============================= -->
+    <section class="page-section" id="types">
+      <div class="sec-head">
+        <p class="eyebrow-note">01 — TYPING</p>
+        <h1>Type Chart</h1>
+        <p>Twenty-two core types, plus the Anomaly classification. Colours are pulled directly from the source list.</p>
+      </div>
+
+      <div class="block">
+        <h2>The 22 types</h2>
+        <p class="block-note">Hover a tile for nothing in particular yet — space here for a one-line description once each type's identity is nailed down.</p>
+        <div class="type-list" id="type-list"></div>
+      </div>
+
+      <div class="block">
+        <h2>Anomaly</h2>
+        <p class="block-note">A non-standard classification, kept outside the effectiveness matrix below.</p>
+        <div class="type-list">
+          <div class="type-tile">
+            <div class="sw" style="background:var(--t-anomaly);"></div>
+            <div><span class="idx">No. 184</span><span class="name">ANOMALY</span></div>
+          </div>
+        </div>
+        <p class="block-note" style="margin-top:16px;">
+          Reserve this for creatures or moves that break the normal type rules — event exclusives,
+          corrupted / glitched forms, boss-only mechanics. Decide later whether it interacts with the
+          chart at all, or sits outside it entirely.
+        </p>
+      </div>
+
+      <div class="block">
+        <h2>Effectiveness matrix</h2>
+        <p class="block-note">
+          Rows attack, columns defend. Every cell is currently blank — replace <code>—</code> with
+          multipliers (e.g. <strong>2×</strong>, <strong>½×</strong>, <strong>0×</strong>) as matchups
+          get decided. Hover a cell to trace its row and column.
+        </p>
+        <div class="chart-wrap"><div id="chart-mount"></div></div>
+        <div class="legend">
+          <div><span>—</span>not yet defined</div>
+          <div><span>2×</span>super effective</div>
+          <div><span>½×</span>not very effective</div>
+          <div><span>0×</span>no effect</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="type-strip"></div>
+
+    <!-- ============================= SPECIES ============================= -->
+    <section class="page-section" id="species">
+      <div class="sec-head">
+        <p class="eyebrow-note">02 — CREATURES</p>
+        <h1>Speciesdex</h1>
+        <p>Every catchable species, in order of discovery. Two sample entries are filled in to show the format — the rest are stubs waiting on real data.</p>
+      </div>
+
+      <div class="block">
+        <div class="toolbar">
+          <input type="search" id="species-search" placeholder="Search species…">
+          <span class="count-note" id="species-count"></span>
+        </div>
+        <div class="toolbar" id="species-filters" style="margin-top:-8px;"></div>
+        <div class="entry-grid" id="species-grid"></div>
+      </div>
+    </section>
+
+    <div class="type-strip"></div>
+
+    <!-- ============================= MOVES ============================= -->
+    <section class="page-section" id="moves">
+      <div class="sec-head">
+        <p class="eyebrow-note">03 — COMBAT</p>
+        <h1>Movedex</h1>
+        <p>Every move a creature can learn. Power, accuracy and PP follow the usual conventions — a dash means the field isn't decided yet.</p>
+      </div>
+
+      <div class="block">
+        <div class="toolbar">
+          <input type="search" id="move-search" placeholder="Search moves…">
+          <span class="count-note" id="move-count"></span>
+        </div>
+        <div class="toolbar" id="move-filters" style="margin-top:-8px;"></div>
+        <div class="chart-wrap" style="overflow-x:auto;">
+          <table class="datatable">
+            <thead>
+              <tr>
+                <th style="min-width:140px;">Move</th>
+                <th>Type</th>
+                <th>Category</th>
+                <th>Power</th>
+                <th>Accuracy</th>
+                <th>PP</th>
+                <th style="min-width:280px;">Effect</th>
+              </tr>
+            </thead>
+            <tbody id="move-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="block">
+        <h2>Categories</h2>
+        <p class="block-note" style="margin-bottom:18px;">A starting split for move categories — rename or expand once battle mechanics are locked in.</p>
+        <div class="stat-block">
+          <div class="stat-block-row"><span>Physical</span><span class="v">contact-based, scales off a physical attack stat</span></div>
+          <div class="stat-block-row"><span>Special</span><span class="v">non-contact, scales off a special attack stat</span></div>
+          <div class="stat-block-row"><span>Support</span><span class="v">status effects, stat changes, healing — no direct damage</span></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="type-strip"></div>
+
+    <!-- ============================= ABILITIES ============================= -->
+    <section class="page-section" id="abilities">
+      <div class="sec-head">
+        <p class="eyebrow-note">04 — TRAITS</p>
+        <h1>Abilitydex</h1>
+        <p>Passive traits a creature can carry into battle. Most species will have one common ability and one rarer alternate — decide that convention here or per-entry.</p>
+      </div>
+
+      <div class="block">
+        <div class="toolbar">
+          <input type="search" id="ability-search" placeholder="Search abilities…">
+          <span class="count-note" id="ability-count"></span>
+        </div>
+        <div class="ability-list" id="ability-list"></div>
+      </div>
+    </section>
+
+    <div class="type-strip"></div>
+
+    <!-- ============================= MECHANICS ============================= -->
+    <section class="page-section" id="mechanics">
+      <div class="sec-head">
+        <p class="eyebrow-note">05 — SYSTEMS</p>
+        <h1>Mechanics</h1>
+        <p>The rules underneath the dex entries — stats, capturing, and progression. Sketched out loosely; treat every number here as a placeholder.</p>
+      </div>
+
+      <div class="block">
+        <h2>Stats</h2>
+        <p class="block-note">A standard six-stat spread, in line with the genre. Rename or add to this list as the battle system takes shape.</p>
+        <div class="two-col">
+          <div class="stat-block">
+            <div class="stat-block-row"><span>Health</span><span class="v">HP</span></div>
+            <div class="stat-block-row"><span>Attack</span><span class="v">ATK</span></div>
+            <div class="stat-block-row"><span>Defense</span><span class="v">DEF</span></div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-block-row"><span>Special Attack</span><span class="v">SP.ATK</span></div>
+            <div class="stat-block-row"><span>Special Defense</span><span class="v">SP.DEF</span></div>
+            <div class="stat-block-row"><span>Speed</span><span class="v">SPD</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <h2>Capturing</h2>
+        <p class="block-note">The loop that gets a wild creature into your roster.</p>
+        <ol class="steps">
+          <li><strong>Encounter</strong> — a wild creature appears, usually tied to a zone and a set of possible species.</li>
+          <li><strong>Weaken</strong> — battle it down, or apply a status effect, to improve capture odds.</li>
+          <li><strong>Throw</strong> — use a capture item; success scales with remaining health, status, and item tier.</li>
+          <li><strong>Confirm</strong> — a captured creature joins your roster or storage, keeping its individual stats.</li>
+        </ol>
+        <div class="note-box" style="margin-top:20px;">
+          Leave room here for capture-item tiers (e.g. Common / Greater / Mystic Orb) once those are designed.
+        </div>
+      </div>
+
+      <div class="block">
+        <h2>Evolution / Growth</h2>
+        <p class="block-note">However creatures change over time — level thresholds, items, trade, or something more unusual given the Mystic / Plague / Anomaly types.</p>
+        <div class="note-box">
+          Undecided. Worth deciding early whether evolution changes typing, since that interacts
+          directly with the effectiveness matrix in the <a href="#types">Type Chart</a> section.
+        </div>
+      </div>
+
+      <div class="block">
+        <h2>Status effects</h2>
+        <p class="block-note">Common status conditions moves and abilities can inflict.</p>
+        <div class="stat-block">
+          <div class="stat-block-row"><span>Burn</span><span class="v">—</span></div>
+          <div class="stat-block-row"><span>Poison</span><span class="v">—</span></div>
+          <div class="stat-block-row"><span>Frozen</span><span class="v">—</span></div>
+          <div class="stat-block-row"><span>Paralyze</span><span class="v">—</span></div>
+          <div class="stat-block-row"><span>Asleep</span><span class="v">—</span></div>
+          <div class="stat-block-row"><span>Corrupted <span style="opacity:.6;">(Plague / Anomaly only?)</span></span><span class="v">—</span></div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="page-foot">Mystorian Uprising Field Guide · fan-made documentation · not affiliated with Roblox Corporation</footer>
+
+  </main>
+</div>
+
+<div class="modal-backdrop" id="species-modal" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-name">
+    <div class="modal-top">
+      <div class="modal-art" id="modal-art"></div>
+      <div class="modal-head">
+        <button class="modal-close" id="modal-close" aria-label="Close">✕</button>
+        <span class="num" id="modal-num"></span>
+        <h3 id="modal-name"></h3>
+        <div class="chips" id="modal-chips"></div>
+        <p id="modal-desc"></p>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section">
+        <h4>STATS</h4>
+        <div id="modal-stats"></div>
+      </div>
+      <div class="modal-section">
+        <h4>ABILITIES</h4>
+        <div class="modal-abilities" id="modal-abilities"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const TYPES = [
+  { id: 163, key: "fire",    name: "Fire" },
+  { id: 164, key: "water",   name: "Water" },
+  { id: 165, key: "plant",   name: "Plant" },
+  { id: 166, key: "spark",   name: "Spark" },
+  { id: 167, key: "light",   name: "Light" },
+  { id: 168, key: "dark",    name: "Dark" },
+  { id: 169, key: "steel",   name: "Steel" },
+  { id: 170, key: "mystic",  name: "Mystic" },
+  { id: 171, key: "fairy",   name: "Fairy" },
+  { id: 172, key: "crystal", name: "Crystal" },
+  { id: 173, key: "earth",   name: "Earth" },
+  { id: 174, key: "cosmic",  name: "Cosmic" },
+  { id: 175, key: "insect",  name: "Insect" },
+  { id: 176, key: "plague",  name: "Plague" },
+  { id: 177, key: "myth",    name: "Myth" },
+  { id: 178, key: "ghost",   name: "Ghost" },
+  { id: 179, key: "flying",  name: "Flying" },
+  { id: 180, key: "combat",  name: "Combat" },
+  { id: 181, key: "joke",    name: "Joke" },
+  { id: 182, key: "frost",   name: "Frost" },
+  { id: 183, key: "basic",   name: "Basic" },
+];
+const ANOMALY = { id: 184, key: "anomaly", name: "ANOMALY" };
+
+/* type strips */
+document.querySelectorAll(".type-strip").forEach(strip => {
+  strip.innerHTML = TYPES.concat([ANOMALY]).map(t => `<span style="background:var(--t-${t.key});"></span>`).join("");
+});
+
+/* type tile list */
+document.getElementById("type-list").innerHTML = TYPES.map(t => `
+  <div class="type-tile">
+    <div class="sw" style="background:var(--t-${t.key});"></div>
+    <div><span class="idx">No. ${t.id}</span><span class="name">${t.name}</span></div>
+  </div>
+`).join("");
+
+/* type chart */
+function buildTypeChart(mountId){
+  const mount = document.getElementById(mountId);
+  if (!mount) return;
+  let thead = `<tr><th class="corner">Atk \\ Def</th>`;
+  TYPES.forEach(t => { thead += `<th data-col="${t.key}"><span class="vert" title="${t.name}">${t.name}</span></th>`; });
+  thead += `</tr>`;
+  let rows = "";
+  TYPES.forEach(row => {
+    rows += `<tr data-row="${row.key}"><th class="rowhead" data-row="${row.key}">${row.name}</th>`;
+    TYPES.forEach(col => {
+      const self = row.key === col.key ? " self" : "";
+      rows += `<td data-row="${row.key}" data-col="${col.key}" class="${self.trim()}">—</td>`;
+    });
+    rows += `</tr>`;
+  });
+  mount.innerHTML = `<table class="chart"><thead>${thead}</thead><tbody>${rows}</tbody></table>`;
+  mount.querySelectorAll("td[data-row]").forEach(cell => {
+    cell.addEventListener("mouseenter", () => {
+      const r = cell.dataset.row, c = cell.dataset.col;
+      mount.querySelectorAll(`[data-row="${r}"]`).forEach(el => el.classList.add("hl"));
+      mount.querySelectorAll(`[data-col="${c}"]`).forEach(el => el.classList.add("hl"));
+    });
+    cell.addEventListener("mouseleave", () => {
+      mount.querySelectorAll(".hl").forEach(el => el.classList.remove("hl"));
+    });
+  });
+}
+buildTypeChart("chart-mount");
+
+/* filter pills */
+function buildTypeFilters(mountId, onChange){
+  const mount = document.getElementById(mountId);
+  if (!mount) return;
+  let html = `<button class="filter-btn active" data-type="all">All types</button>`;
+  TYPES.concat([ANOMALY]).forEach(t => { html += `<button class="filter-btn" data-type="${t.key}">${t.name}</button>`; });
+  mount.innerHTML = html;
+  mount.querySelectorAll(".filter-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      mount.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      onChange(btn.dataset.type);
+    });
+  });
+}
+
+function wireSearch(inputId, itemSelector, getText){
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  input.addEventListener("input", () => {
+    const q = input.value.trim().toLowerCase();
+    document.querySelectorAll(itemSelector).forEach(item => {
+      item.style.display = getText(item).toLowerCase().includes(q) ? "" : "none";
+    });
+  });
+}
+
+/* ---------------- species ---------------- */
+// To add real art to a species, give it an "img" field pointing at an image
+// file next to this HTML file, e.g.  img:"images/emberkit.png"
+// Leave it off (or delete it) to keep showing the placeholder tile.
+const SPECIES = [
+  { id:"???", name:"Flaranda", types:["fire","mystic"], desc:"The Dancer Mystorian", stub:false,
+    stats:{hp:105,atk:98,def:62,spatk:98,spdef:62,spd:100}, abilities:["Scout","Glutten","Dancer"], img:"images/flaranda.png" },
+  { id:"???", name:"Dryrm", types:["earth","crystal"], desc:"The Worm Mystorian", stub:false,
+    stats:{hp:35,atk:87,def:30,spatk:41,spdef:60,spd:72}, abilities:["Scout","Trickster","Roadrunner"], img:"images/dryrm.png" },
+  { id:"???", name:"Crystyrm", types:["earth","crystal"], desc:"The Drill Mystorian", stub:false,
+    stats:{hp:72,atk:110,def:40,spatk:80,spdef:68,spd:90}, abilities:["Scout","Trickster","Roadrunner"], img:"images/crystyrm.png" },
+  { id:"???", name:"Moltin", types:["fire","steel"], desc:"The Molten Metal Mystorian", stub:false,
+    stats:{hp:50,atk:45,def:65,spatk:65,spdef:30,spd:30}, abilities:["Molten","Brute","Hellscape"], img:"images/moltin.png" },
+  { id:"???", name:"Iropyro", types:["fire","steel"], desc:"The Molten Metal Mystorian", stub:false,
+    stats:{hp:75,atk:80,def:90,spatk:90,spdef:50,spd:45}, abilities:["Molten","Brute","Hellscape"], img:"images/iropyro.png" },
+  { id:"???", name:"Mechasear", types:["fire","steel"], desc:"The Molten Metal Mystorian", stub:false,
+    stats:{hp:95,atk:90,def:120,spatk:110,spdef:65,spd:60}, abilities:["Molten","Brute","Hellscape"], img:"images/mechasear.png" },
+
+  { id:"???", name:"Frostefeu", types:["fire","frost"], desc:"The Half Hot Mystorian", stub:false,
+    stats:{hp:75,atk:45,def:40,spatk:30,spdef:30,spd:20}, abilities:["Coldfront","Thick Skin","Hellscape"], img:"images/frostefeu.png" },
+  { id:"???", name:"Singill", types:["fire","frost"], desc:"The Half Cold Mystorian", stub:false,
+    stats:{hp:105,atk:65,def:70,spatk:65,spdef:35,spd:35}, abilities:["Coldfront","Thick Skin","Hellscape"], img:"images/singill.png" },
+  { id:"???", name:"Infernammoth", types:["fire","frost"], desc:"The Apex Mystorian", stub:false,
+    stats:{hp:125,atk:85,def:105,spatk:115,spdef:50,spd:50}, abilities:["Coldfront","Fur Coat","Hellscape"], img:"images/infernammoth.png" },
+
+  { id:"003", name:"—", types:["plant"], stub:true },
+  { id:"004", name:"—", types:["spark"], stub:true },
+  { id:"005", name:"—", types:["dark","ghost"], stub:true },
+  { id:"006", name:"—", types:["steel"], stub:true },
+  { id:"007", name:"—", types:["mystic"], stub:true },
+  { id:"008", name:"—", types:["insect"], stub:true },
+  { id:"009", name:"—", types:["crystal","earth"], stub:true },
+  { id:"010", name:"—", types:["flying"], stub:true },
+  { id:"011", name:"—", types:["combat"], stub:true },
+  { id:"012", name:"—", types:["frost"], stub:true },
+];
+function chipsFor(types){
+  return types.map(k => {
+    const t = TYPES.find(t => t.key === k) || { name: k[0].toUpperCase()+k.slice(1) };
+    return `<span class="chip t-${k}">${t.name}</span>`;
+  }).join("");
+}
+
+/* Swaps a broken <img> for a labelled placeholder. Built with DOM calls (not an
+   inline string) so quotes in the font names can't break the onerror attribute. */
+function imgFallback(img){
+  const box = document.createElement("div");
+  box.style.cssText = "background:var(--ink-4);color:var(--parchment-dim-2);display:flex;align-items:center;justify-content:center;flex-direction:column;width:100%;height:100%;font-family:var(--mono);font-size:12px;text-align:center;padding:8px;";
+  box.textContent = "image not found: " + img.getAttribute("src");
+  img.replaceWith(box);
+}
+
+/* Renders a creature's picture. If the species object has an `img` field
+   (a path to a real image file, e.g. "images/emberkit.png"), that image is
+   shown. Otherwise it falls back to a placeholder tile tinted by the
+   species' type(s). Both the dex card and the modal call this same
+   function, so adding real art is just adding `img` to a species entry. */
+function creatureArt(species, uid){
+  if (species.img) {
+    return `<img src="${species.img}" alt="${species.stub ? 'Unnamed species' : species.name}"
+                 style="width:100%;height:100%;object-fit:cover;display:block;"
+                 onerror="imgFallback(this)">`;
+  }
+  const c1 = `var(--t-${species.types[0]})`;
+  const c2 = species.types[1] ? `var(--t-${species.types[1]})` : `var(--ink-4)`;
+  const gid = `grad-${uid}`;
+  return `
+    <svg viewBox="0 0 240 180" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="${gid}" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="${c1}" stop-opacity="0.55"/>
+          <stop offset="100%" stop-color="${c2}" stop-opacity="0.35"/>
+        </linearGradient>
+      </defs>
+      <rect width="240" height="180" fill="${gid ? `url(#${gid})` : c1}"/>
+      ${species.stub ? `
+        <text x="120" y="100" text-anchor="middle" font-family="IBM Plex Mono, monospace"
+              font-size="15" fill="rgba(236,230,214,0.55)">no artwork yet</text>
+      ` : `
+        <circle cx="120" cy="96" r="46" fill="rgba(8,9,15,0.28)"/>
+        <circle cx="103" cy="88" r="6" fill="rgba(236,230,214,0.85)"/>
+        <circle cx="137" cy="88" r="6" fill="rgba(236,230,214,0.85)"/>
+        <text x="120" y="150" text-anchor="middle" font-family="IBM Plex Mono, monospace"
+              font-size="12" fill="rgba(236,230,214,0.55)">placeholder art</text>
+      `}
+    </svg>`;
+}
+
+function renderSpecies(list){
+  document.getElementById("species-grid").innerHTML = list.map(s => `
+    <div class="entry" data-idx="${SPECIES.indexOf(s)}" tabindex="0" role="button"
+         aria-label="View details for ${s.stub ? 'unnamed species ' + s.id : s.name}"
+         data-name="${s.name.toLowerCase()}" data-types="${s.types.join(',')}">
+      <div class="art">${creatureArt(s, SPECIES.indexOf(s))}</div>
+      <span class="num">No. ${s.id}</span>
+      <h3>${s.stub ? "Unnamed species" : s.name}</h3>
+      <div class="chips">${chipsFor(s.types)}</div>
+      ${s.stub ? `<p class="stub">No field data logged yet.</p>` : `<p>${s.desc}</p>`}
+      <span class="tap-note">click for stats &amp; abilities →</span>
+    </div>
+  `).join("");
+  document.getElementById("species-count").textContent = `${list.length} entries shown`;
+}
+renderSpecies(SPECIES);
+buildTypeFilters("species-filters", (k) => renderSpecies(k === "all" ? SPECIES : SPECIES.filter(s => s.types.includes(k))));
+wireSearch("species-search", "#species-grid .entry", el => el.dataset.name + " " + el.dataset.types);
+
+/* ---------------- species detail modal ---------------- */
+
+const STAT_LABELS = [["hp","HP"],["atk","ATK"],["def","DEF"],["spatk","SP.ATK"],["spdef","SP.DEF"],["spd","SPD"]];
+const STAT_MAX = 150; // scale for the bar fill — raise once real stat ranges exist
+
+function openSpeciesModal(idx){
+  const s = SPECIES[idx];
+  if (!s) return;
+
+  document.getElementById("modal-art").innerHTML = creatureArt(s, "modal-" + idx);
+  document.getElementById("modal-num").textContent = `No. ${s.id}`;
+  document.getElementById("modal-name").textContent = s.stub ? "Unnamed species" : s.name;
+  document.getElementById("modal-chips").innerHTML = chipsFor(s.types);
+  document.getElementById("modal-desc").textContent = s.stub ? "No field data logged yet." : s.desc;
+
+  document.getElementById("modal-stats").innerHTML = s.stats
+    ? STAT_LABELS.map(([key,label]) => {
+        const v = s.stats[key];
+        const pct = Math.max(4, Math.min(100, Math.round((v / STAT_MAX) * 100)));
+        return `
+          <div class="stat-bar-row">
+            <span class="lbl">${label}</span>
+            <span class="track"><span class="fill s-${key}" style="--w:${pct}%;"></span></span>
+            <span class="val">${v}</span>
+          </div>`;
+      }).join("")
+    : STAT_LABELS.map(([key,label]) => `
+        <div class="stat-bar-row">
+          <span class="lbl">${label}</span>
+          <span class="track"><span class="fill s-${key}" style="--w:0%;"></span></span>
+          <span class="val">—</span>
+        </div>`).join("");
+
+  const abilityList = (s.abilities || []);
+  document.getElementById("modal-abilities").innerHTML = abilityList.length
+    ? abilityList.map(name => {
+        const found = ABILITIES.find(a => a.name === name);
+        return `
+          <div class="modal-ability">
+            <div class="aname">${name}</div>
+            <div class="adesc">${found ? found.desc : "No effect written yet."}</div>
+          </div>`;
+      }).join("")
+    : `<div class="modal-ability"><div class="aname">Unassigned</div><div class="adesc">No ability logged yet.</div></div>`;
+
+  const modal = document.getElementById("species-modal");
+  modal.classList.add("open");
+  modal.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+  document.getElementById("modal-close").focus();
+}
+
+function closeSpeciesModal(){
+  const modal = document.getElementById("species-modal");
+  modal.classList.remove("open");
+  modal.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+}
+
+document.getElementById("species-grid").addEventListener("click", (e) => {
+  const card = e.target.closest(".entry");
+  if (card) openSpeciesModal(Number(card.dataset.idx));
+});
+document.getElementById("species-grid").addEventListener("keydown", (e) => {
+  if (e.key !== "Enter" && e.key !== " ") return;
+  const card = e.target.closest(".entry");
+  if (card){ e.preventDefault(); openSpeciesModal(Number(card.dataset.idx)); }
+});
+document.getElementById("modal-close").addEventListener("click", closeSpeciesModal);
+document.getElementById("species-modal").addEventListener("click", (e) => {
+  if (e.target.id === "species-modal") closeSpeciesModal();
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closeSpeciesModal();
+});
+
+/* ---------------- moves ---------------- */
+const MOVES = [
+  { name:"Cinder Snap", type:"fire", cat:"Physical", power:45, acc:100, pp:25, effect:"A quick, low-heat bite. Rarely, may leave a light burn." },
+  { name:"Undertow", type:"water", cat:"Special", power:65, acc:95, pp:15, effect:"Drags the target through a pocket of water, ignoring some evasion." },
+  { name:"Bramble Lash", type:"plant", cat:"Physical", power:55, acc:100, pp:20, effect:"—" },
+  { name:"Still Focus", type:"mystic", cat:"Support", power:"—", acc:"—", pp:20, effect:"Raises the user's special attack for a few turns." },
+  { name:"—", type:"spark", cat:"—", power:"—", acc:"—", pp:"—", effect:"—" },
+  { name:"—", type:"steel", cat:"—", power:"—", acc:"—", pp:"—", effect:"—" },
+  { name:"—", type:"dark", cat:"—", power:"—", acc:"—", pp:"—", effect:"—" },
+  { name:"—", type:"combat", cat:"—", power:"—", acc:"—", pp:"—", effect:"—" },
+  { name:"—", type:"frost", cat:"—", power:"—", acc:"—", pp:"—", effect:"—" },
+  { name:"—", type:"ghost", cat:"—", power:"—", acc:"—", pp:"—", effect:"—" },
+];
+function renderMoves(list){
+  const typeName = k => (TYPES.find(t => t.key === k) || {name:k}).name;
+  document.getElementById("move-body").innerHTML = list.map(m => `
+    <tr data-name="${m.name.toLowerCase()}" data-type="${m.type}">
+      <td class="mvname">${m.name}</td>
+      <td><span class="chip t-${m.type}">${typeName(m.type)}</span></td>
+      <td class="cat">${m.cat}</td>
+      <td class="num">${m.power}</td>
+      <td class="num">${m.acc}</td>
+      <td class="num">${m.pp}</td>
+      <td class="mvdesc">${m.effect}</td>
+    </tr>
+  `).join("");
+  document.getElementById("move-count").textContent = `${list.length} moves shown`;
+}
+renderMoves(MOVES);
+buildTypeFilters("move-filters", (k) => renderMoves(k === "all" ? MOVES : MOVES.filter(m => m.type === k)));
+wireSearch("move-search", "#move-body tr", el => el.dataset.name + " " + el.dataset.type);
+
+/* ---------------- abilities ---------------- */
+const ABILITIES = [
+  { name:"Kindling", tag:"common", desc:"Boosts the power of Fire-type moves when this creature's health is low." },
+  { name:"Riptide", tag:"common", desc:"Chip damage from Water-type hazards is halved for this creature." },
+  { name:"—", tag:"stub", desc:"" },
+  { name:"—", tag:"stub", desc:"" },
+  { name:"—", tag:"stub", desc:"" },
+  { name:"—", tag:"stub", desc:"" },
+  { name:"—", tag:"stub", desc:"" },
+  { name:"—", tag:"stub", desc:"" },
+];
+function renderAbilities(list){
+  document.getElementById("ability-list").innerHTML = list.map(a => `
+    <div class="ability-row" data-name="${a.name.toLowerCase()}">
+      <div><h3>${a.name === "—" ? "Unnamed ability" : a.name}</h3><span class="tag">${a.tag}</span></div>
+      <p class="${a.desc ? '' : 'stub'}">${a.desc || "No effect written yet."}</p>
+    </div>
+  `).join("");
+  document.getElementById("ability-count").textContent = `${list.length} entries shown`;
+}
+renderAbilities(ABILITIES);
+wireSearch("ability-search", "#ability-list .ability-row", el => el.dataset.name);
+
+/* ---------------- scroll-spy nav ---------------- */
+const navLinks = Array.from(document.querySelectorAll("#side-nav a"));
+const sections = navLinks.map(a => document.querySelector(a.getAttribute("href")));
+const spy = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    const link = navLinks.find(a => a.getAttribute("href") === "#" + entry.target.id);
+    if (!link) return;
+    if (entry.isIntersecting) {
+      navLinks.forEach(a => a.classList.remove("active"));
+      link.classList.add("active");
+    }
+  });
+}, { rootMargin: "-15% 0px -70% 0px", threshold: 0 });
+sections.forEach(s => s && spy.observe(s));
+</script>
+</body>
+</html>
