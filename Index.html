@@ -1011,9 +1011,12 @@ function wireSearch(inputId, itemSelector, getText){
 }
 
 /* ---------------- species ---------------- */
+// To add real art to a species, give it an "img" field pointing at an image
+// file next to this HTML file, e.g.  img:"images/emberkit.png"
+// Leave it off (or delete it) to keep showing the placeholder tile.
 const SPECIES = [
-  { id:"001", name:"Emberkit", types:["fire"], desc:"A young fox with a tail that smoulders instead of burns. Cool to the touch until it gets excited, then not.", stub:false,
-    stats:{hp:44,atk:58,def:40,spatk:52,spdef:41,spd:66}, abilities:["Kindling"] },
+  { id:"???", name:"Flaranda", types:["fire","Mystic"], desc:"The Dancer Mystorian", stub:false,
+    stats:{hp:44,atk:58,def:40,spatk:52,spdef:41,spd:66}, abilities:["Scout","Glutten","Dancer"] /*, img:"https://media.discordapp.net/attachments/1235712264607236117/1551499192709546035/Flaranda.png?ex=6ab231b9&is=6ab0e039&hm=5cb2291f3f913fc51817db8011a7098f75b022298cbf2248ea8344f742c38b3c&=&format=webp&quality=lossless&width=1423&height=1536" */ },
   { id:"002", name:"Tidalen", types:["water","cosmic"], desc:"Drifts along ocean currents in loose formation with others of its kind, glowing faintly in sync.", stub:false,
     stats:{hp:60,atk:35,def:48,spatk:64,spdef:58,spd:39}, abilities:["Riptide"] },
   { id:"003", name:"—", types:["plant"], stub:true },
@@ -1034,9 +1037,18 @@ function chipsFor(types){
   }).join("");
 }
 
-/* Placeholder "no artwork yet" creature silhouette, tinted by the species' type(s).
-   Swap this out for real art later — each card and the modal both call creatureArt(). */
+/* Renders a creature's picture. If the species object has an `img` field
+   (a path to a real image file, e.g. "images/emberkit.png"), that image is
+   shown. Otherwise it falls back to a placeholder tile tinted by the
+   species' type(s). Both the dex card and the modal call this same
+   function, so adding real art is just adding `img` to a species entry. */
 function creatureArt(species, uid){
+  if (species.img) {
+    const fallback = "background:var(--ink-4);color:var(--parchment-dim-2);display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-family:'IBM Plex Mono',monospace;font-size:12px;text-align:center;padding:8px;";
+    return `<img src="${species.img}" alt="${species.stub ? 'Unnamed species' : species.name}"
+                 style="width:100%;height:100%;object-fit:cover;display:block;"
+                 onerror="this.outerHTML='&lt;div style=&quot;${fallback}&quot;&gt;image not found:<br>${species.img}&lt;/div&gt;';">`;
+  }
   const c1 = `var(--t-${species.types[0]})`;
   const c2 = species.types[1] ? `var(--t-${species.types[1]})` : `var(--ink-4)`;
   const gid = `grad-${uid}`;
