@@ -502,6 +502,98 @@ table.chart th.rowhead.hl, table.chart th.vert.hl{ color: var(--accent); }
 .ability-row p{ margin:0; color: var(--parchment-dim); font-size:.9rem; }
 .ability-row p.stub{ font-style:italic; color: var(--parchment-dim-2); }
 
+/* ---------- characters ---------- */
+
+.team-grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:1px; background: var(--line); border:1px solid var(--line); }
+.team-card{ background: var(--ink-2); padding: 20px 22px; border-top: 3px solid var(--team-color, var(--line)); }
+.team-card .sw-row{ display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.team-card .sw{ width:14px; height:14px; border-radius:50%; background: var(--team-color, var(--parchment-dim-2)); flex:none; }
+.team-card h3{ font-family: var(--serif); margin:0; font-size:1.1rem; }
+.team-card .motto{ display:block; font-family: var(--mono); font-size:.72rem; color: var(--accent-dim); margin-bottom:10px; }
+.team-card p{ margin:0; font-size:.85rem; color: var(--parchment-dim); }
+.team-card p.stub{ font-style:italic; color: var(--parchment-dim-2); }
+
+.cast-grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(232px, 1fr)); gap:1px; background: var(--line); border:1px solid var(--line); }
+.cast-card{ background: var(--ink-2); padding: 20px 22px 22px; border-top: 3px solid var(--line); }
+.cast-card .avatar{
+  width:52px; height:52px; border-radius:50%; margin-bottom:14px;
+  background: linear-gradient(135deg, var(--ink-4), var(--ink-3));
+  border:1px solid var(--line); display:flex; align-items:center; justify-content:center;
+  font-family: var(--serif); font-size:1.2rem; color: var(--parchment-dim-2);
+  overflow:hidden; flex:none;
+}
+.cast-card .avatar img{ width:100%; height:100%; object-fit:cover; display:block; }
+.cast-card .num{ font-family: var(--mono); font-size:.72rem; color: var(--parchment-dim-2); }
+.cast-card h3{ font-family: var(--serif); margin: 7px 0 6px; font-size:1.12rem; }
+.cast-card .role{ display:block; font-family: var(--mono); font-size:.72rem; color: var(--accent-dim); margin-bottom:11px; }
+.cast-card p{ margin:0; font-size:.85rem; color: var(--parchment-dim); }
+.cast-card p.stub{ font-style:italic; color: var(--parchment-dim-2); }
+.cast-card{ cursor:pointer; transition: border-color .15s ease, background-color .15s ease; }
+.cast-card:hover{ border-top-color: var(--accent-dim); background: var(--ink-3); }
+.cast-card:focus-visible{ outline: 2px solid var(--accent); outline-offset: -2px; }
+.cast-card .tap-note{
+  display:block; margin-top:12px; font-family: var(--mono); font-size:.68rem;
+  color: var(--parchment-dim-2); opacity:0; transition: opacity .15s ease;
+}
+.cast-card:hover .tap-note, .cast-card:focus-visible .tap-note{ opacity:1; }
+
+/* ---------- character profile (full page) ---------- */
+
+.char-page{
+  position:fixed; inset:0; z-index:60;
+  background: var(--ink);
+  overflow-y:auto;
+  opacity:0; pointer-events:none;
+  transition: opacity .2s ease;
+}
+.char-page.open{ opacity:1; pointer-events:auto; }
+.char-page-strip{ display:flex; height:6px; width:100%; }
+.char-page-strip span{ flex:1; }
+.char-page-inner{ max-width:900px; margin:0 auto; padding: 34px 32px 100px; }
+.char-page-close{
+  display:inline-flex; align-items:center; gap:8px;
+  background: var(--ink-2); border:1px solid var(--line); color:var(--parchment-dim);
+  padding:9px 16px; border-radius:var(--radius); cursor:pointer;
+  font-family:var(--sans); font-size:.85rem; margin-bottom:34px;
+}
+.char-page-close:hover{ color:var(--parchment); border-color:var(--accent-dim); }
+.char-page-hero{ display:flex; gap:32px; align-items:flex-end; margin-bottom:40px; flex-wrap:wrap; }
+.char-page-art{
+  width:190px; height:190px; border-radius:var(--radius); flex:none; overflow:hidden;
+  background: var(--ink-3); border:1px solid var(--line);
+  display:flex; align-items:center; justify-content:center;
+}
+.char-page-art img{ width:100%; height:100%; object-fit:cover; display:block; }
+.char-page-art .initial{ font-family:var(--serif); font-size:4rem; color:var(--parchment-dim-2); }
+.char-page-head .num{ font-family:var(--mono); font-size:.78rem; color:var(--parchment-dim-2); }
+.char-page-head h1{ font-family:var(--serif); font-size:2.5rem; margin:8px 0 10px; line-height:1.05; }
+.char-page-head .role{ display:block; font-family:var(--mono); font-size:.85rem; color:var(--accent-dim); margin-bottom:12px; }
+.char-page-head .chips{ display:flex; gap:6px; flex-wrap:wrap; }
+.char-page-head .team-chip{
+  display:inline-flex; align-items:center; gap:7px;
+  padding:5px 13px; border-radius:999px; font-size:.8rem; font-weight:600;
+  background: var(--ink-2); border:1px solid var(--line); color:var(--parchment);
+}
+.char-page-head .team-chip .dot{ width:9px; height:9px; border-radius:50%; background: var(--team-color, var(--parchment-dim-2)); }
+
+.char-page-section{ margin-bottom:38px; max-width:680px; }
+.char-page-section h4{
+  font-family:var(--mono); font-size:.73rem; color:var(--accent-dim);
+  letter-spacing:.02em; margin:0 0 18px; padding-bottom:12px; border-bottom:1px solid var(--line);
+}
+.char-quote{
+  border-left:2px solid var(--accent-dim); padding:2px 0 2px 18px; margin-bottom:18px;
+  font-family:var(--serif); font-style:italic; font-size:1.08rem; color:var(--parchment);
+}
+.char-page-section p{ color:var(--parchment-dim); font-size:.95rem; line-height:1.75; margin:0; }
+.char-page-section p.stub{ font-style:italic; color:var(--parchment-dim-2); }
+
+@media (max-width: 880px){
+  .char-page-inner{ padding: 24px 20px 80px; }
+  .char-page-hero{ flex-direction:column; align-items:flex-start; }
+  .char-page-art{ width:140px; height:140px; }
+}
+
 /* ---------- mechanics ---------- */
 
 .two-col{ display:grid; grid-template-columns: 1fr 1fr; gap: 44px; }
@@ -635,6 +727,7 @@ footer.page-foot{
         <li><a href="#moves"><span class="i">03</span>Movedex</a></li>
         <li><a href="#abilities"><span class="i">04</span>Abilitydex</a></li>
         <li><a href="#mechanics"><span class="i">05</span>Mechanics</a></li>
+        <li><a href="#characters"><span class="i">06</span>Characters</a></li>
       </ul>
     </nav>
     <div class="side-foot">
@@ -683,6 +776,10 @@ footer.page-foot{
           <a class="nav-card" href="#abilities" style="--card-accent:var(--t-frost);">
             <span class="k">04</span><h3>Abilitydex</h3>
             <p>Passive traits creatures can carry into battle, and what each one is meant to do.</p>
+          </a>
+          <a class="nav-card" href="#characters" style="--card-accent:var(--t-combat);">
+            <span class="k">06</span><h3>Characters</h3>
+            <p>Lore, teams/factions, and the cast — trainers, rivals, and whoever's running the Uprising.</p>
           </a>
         </div>
       </div>
@@ -899,6 +996,56 @@ footer.page-foot{
       </div>
     </section>
 
+    <div class="type-strip"></div>
+
+    <!-- ============================= CHARACTERS ============================= -->
+    <section class="page-section" id="characters">
+      <div class="sec-head">
+        <p class="eyebrow-note">06 — LORE &amp; CAST</p>
+        <h1>Characters</h1>
+        <p>The people behind the Mystorium: the world's setup, the factions pulling at it, and the cast tamers will actually run into. Every entry below is a stub — this is the shape to fill in once the story's nailed down.</p>
+      </div>
+
+      <div class="block">
+        <h2>World &amp; lore</h2>
+        <p class="block-note">The one-paragraph pitch for what's going on, and what "Uprising" actually refers to.</p>
+        <div class="note-box">
+          <strong>Setting</strong> — undecided. A line or two on the Mystorium itself: what kind of place
+          it is, how tamers and Mystorians coexist there, what era or tone the guide is going for.
+          <br><br>
+          <strong>The Uprising</strong> — undecided. Presumably the central conflict the title points at:
+          who's rising up, against what, and why it matters to a player starting out. Worth deciding
+          early, since it'll likely shape which teams exist and who the antagonist cast is.
+        </div>
+      </div>
+
+      <div class="block">
+        <h2>Teams &amp; factions</h2>
+        <p class="block-note">Organized groups a tamer might join, rival, or get tangled up with. Give each one a colour so it reads consistently across the guide — chip colours below are placeholders.</p>
+        <div class="team-grid" id="team-grid"></div>
+      </div>
+
+      <div class="block">
+        <h2>Cast</h2>
+        <p class="block-note">Named characters — the player's own trainer, rivals, faction leaders, mentors, whoever else recurs. Fill in a name, role, and short bio as the story takes shape.</p>
+        <div class="toolbar">
+          <input type="search" id="character-search" placeholder="Search characters…">
+          <span class="count-note" id="character-count"></span>
+        </div>
+        <div class="cast-grid" id="character-grid"></div>
+      </div>
+
+      <div class="block">
+        <h2>Design notes</h2>
+        <p class="block-note">Loose scaffolding for character designs, separate from lore/writing.</p>
+        <div class="note-box">
+          Leave space here for the visual side once it exists — silhouette/colour language per team,
+          whether the player character is customizable or fixed, and how closely NPC designs should
+          echo the Mystorian they're associated with (e.g. a fire-team leader dressing the part).
+        </div>
+      </div>
+    </section>
+
     <footer class="page-foot">Mystorian Uprising Field Guide · fan-made documentation · not affiliated with Roblox Corporation</footer>
 
   </main>
@@ -925,6 +1072,30 @@ footer.page-foot{
         <h4>ABILITIES</h4>
         <div class="modal-abilities" id="modal-abilities"></div>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="char-page" id="character-page" aria-hidden="true">
+  <div class="char-page-strip" id="char-page-strip-top"></div>
+  <div class="char-page-inner">
+    <button class="char-page-close" id="character-page-close">&larr; Back to Characters</button>
+    <div class="char-page-hero">
+      <div class="char-page-art" id="cp-art"></div>
+      <div class="char-page-head">
+        <span class="num" id="cp-num"></span>
+        <h1 id="cp-name"></h1>
+        <span class="role" id="cp-role"></span>
+        <div class="chips" id="cp-team-chip"></div>
+      </div>
+    </div>
+    <div class="char-page-section">
+      <h4>QUOTES</h4>
+      <div id="cp-quotes"></div>
+    </div>
+    <div class="char-page-section">
+      <h4>BIOGRAPHY / LORE</h4>
+      <p id="cp-bio"></p>
     </div>
   </div>
 </div>
@@ -1037,11 +1208,11 @@ const SPECIES = [
   { id:"???", name:"Crystyrm", types:["earth","crystal"], desc:"The Drill Mystorian", stub:false,
     stats:{hp:72,atk:110,def:40,spatk:80,spdef:68,spd:90}, abilities:["Scout","Trickster","Roadrunner"], img:"images/crystyrm.png" },
   { id:"???", name:"Moltin", types:["fire","steel"], desc:"The Molten Metal Mystorian", stub:false,
-    stats:{hp:50,atk:45,def:65,spatk:65,spdef:30,spd:30}, abilities:["Molten","Brute","Hellscape"], img:"images/moltin.png" },
+    stats:{hp:50,atk:45,def:65,spatk:65,spdef:30,spd:30}, abilities:["Molten","Brute","Steamy"], img:"images/moltin.png" },
   { id:"???", name:"Iropyro", types:["fire","steel"], desc:"The Molten Metal Mystorian", stub:false,
-    stats:{hp:75,atk:80,def:90,spatk:90,spdef:50,spd:45}, abilities:["Molten","Brute","Hellscape"], img:"images/iropyro.png" },
+    stats:{hp:75,atk:80,def:90,spatk:90,spdef:50,spd:45}, abilities:["Molten","Brute","Steamy"], img:"images/iropyro.png" },
   { id:"???", name:"Mechasear", types:["fire","steel"], desc:"The Molten Metal Mystorian", stub:false,
-    stats:{hp:95,atk:90,def:120,spatk:110,spdef:65,spd:60}, abilities:["Molten","Brute","Hellscape"], img:"images/mechasear.png" },
+    stats:{hp:95,atk:90,def:120,spatk:110,spdef:65,spd:60}, abilities:["Molten","Brute","Steamy"], img:"images/mechasear.png" },
 
   { id:"???", name:"Frostefeu", types:["fire","frost"], desc:"The Half Hot Mystorian", stub:false,
     stats:{hp:75,atk:45,def:40,spatk:30,spdef:30,spd:20}, abilities:["Coldfront","Thick Skin","Hellscape"], img:"images/frostefeu.png" },
@@ -1049,6 +1220,18 @@ const SPECIES = [
     stats:{hp:105,atk:65,def:70,spatk:65,spdef:35,spd:35}, abilities:["Coldfront","Thick Skin","Hellscape"], img:"images/singill.png" },
   { id:"???", name:"Infernammoth", types:["fire","frost"], desc:"The Apex Mystorian", stub:false,
     stats:{hp:125,atk:85,def:105,spatk:115,spdef:50,spd:50}, abilities:["Coldfront","Fur Coat","Hellscape"], img:"images/infernammoth.png" },
+
+  { id:"???", name:"Ninou", types:["frost","basic"], desc:"The Little Fox Mystorian", stub:false,
+    stats:{hp:45,atk:38,def:42,spatk:60,spdef:50,spd:65}, abilities:["Scurry","Frosty","Guardian"], img:"images/ninou.png" },
+  { id:"???", name:"Reniglace", types:["frost","basic"], desc:"The Fox Mystorian", stub:false,
+    stats:{hp:60,atk:46,def:62,spatk:87,spdef:60,spd:85}, abilities:["Scurry","Frosty","Guardian"], img:"images/reniglace.png" },
+  { id:"???", name:"Givralune", types:["frost","mystic"], desc:"The Mystical Mystorian", stub:false,
+    stats:{hp:68,atk:55,def:70,spatk:117,spdef:85,spd:115}, abilities:["Scurry","Frosty","Guardian"], img:"images/givralune.png" },
+
+  { id:"???", name:"Bandlewic", types:["fire"], desc:"The Candle Bat Mystorian", stub:false,
+    stats:{hp:40,atk:90,def:25,spatk:35,spdef:68,spd:82}, abilities:["?","?","?"], img:"images/bandlewic.png" },
+  { id:"???", name:"Vigilbante", types:["fire","dark"], desc:"The Vigilante Mystorian", stub:false,
+    stats:{hp:65,atk:105,def:45,spatk:45,spdef:88,spd:112}, abilities:["?","?","?"], img:"images/vigilbante.png" },
 
   { id:"003", name:"—", types:["plant"], stub:true },
   { id:"004", name:"—", types:["spark"], stub:true },
@@ -1242,14 +1425,14 @@ wireSearch("move-search", "#move-body tr", el => el.dataset.name + " " + el.data
 
 /* ---------------- abilities ---------------- */
 const ABILITIES = [
-  { name:"Kindling", tag:"common", desc:"Boosts the power of Fire-type moves when this creature's health is low." },
-  { name:"Riptide", tag:"common", desc:"Chip damage from Water-type hazards is halved for this creature." },
-  { name:"—", tag:"stub", desc:"" },
-  { name:"—", tag:"stub", desc:"" },
-  { name:"—", tag:"stub", desc:"" },
-  { name:"—", tag:"stub", desc:"" },
-  { name:"—", tag:"stub", desc:"" },
-  { name:"—", tag:"stub", desc:"" },
+  { name:"Rusty", tag:"common", desc:"25% speed increase, but gain the weakness to Water-Type attacks." },
+  { name:"Insomniac", tag:"common", desc:"This Mystorian is unable to fall asleep." },
+  { name:"Haywire", tag:"common", desc:"When struck by a super-effective attack, gain a sharp speed increase. (+2)" },
+  { name:"Sugar Coated", tag:"common", desc:"When struck by a physical attack, lower the foes speed sharply. (-2)" },
+  { name:"Magic Trick", tag:"common", desc:"This Mystorians physical and special defense stats are swapped." },
+  { name:"Mono-Tone", tag:"common", desc:"This Mystorian gains an immunity to sound-based moves." },
+  { name:"Colorful", tag:"common", desc:"This Mystorian changes its type to the type of the first move it uses. (ONLY ACTIVATED ONCE PER BATTLE)" },
+  { name:"Pudgy", tag:"common", desc:"This Mystorian's Special and Physical defense are boosted by 25%." },
 ];
 function renderAbilities(list){
   document.getElementById("ability-list").innerHTML = list.map(a => `
@@ -1262,6 +1445,131 @@ function renderAbilities(list){
 }
 renderAbilities(ABILITIES);
 wireSearch("ability-search", "#ability-list .ability-row", el => el.dataset.name);
+
+/* ---------------- characters ---------------- */
+// Give a team a `color` (any CSS colour, or one of the --t-* type vars, e.g.
+// "var(--t-fire)") to tint its card and any character chips referencing it.
+const TEAMS = [
+  { name:"Trainers", color:"var(--parchment-dim-2)", motto:"-", desc:"People who befriend and battle alongside Mystorians!", stub:false },
+  { name:"—", color:"var(--parchment-dim-2)", motto:"", desc:"", stub:true },
+  { name:"—", color:"var(--parchment-dim-2)", motto:"", desc:"", stub:true },
+];
+
+// Give a character a `team` matching a name in TEAMS above to link the two;
+// leave it as "—" for independents / not-yet-decided. `quotes` is a list of
+// short lines said by the character; `bio` is the longer lore writeup. Give
+// a character an `img` field (e.g. "images/characters/rival.png") to show a
+// real portrait on their card and profile page — otherwise it falls back to
+// an initial-letter placeholder.
+const CHARACTERS = [
+  { id:"C-001", name:"Greegr", role:"Elite Four", team:"Trainers",
+    bio:"Greegr is a legendary pirate captain and the fourth member of the Elite Four, known throughout the region as one of its most dangerous trainers and the second strongest trainer in the region. Having spent most of his life sailing across unpredictable seas, Greegr learned to embrace the chaos of nature rather than fear it, eventually developing a unique battling style centered around controlling the weather. Rather than specializing in a single weather condition, Greegr constantly changes the battlefield to whatever weather benefits him most, forcing his opponents to adapt to his ever-changing strategies. His philosophy is simple: a battle is just another sea, and the captain who controls the weather controls the voyage. Greegr is rarely seen without his trusted first mate, Len, who has sailed alongside him for years and acts as both his closest companion and the practical voice that keeps his reckless ideas in check. Greegr's closest Mystorian is Sundowl, an Ice/Fairy-type Mystorian that evolved from a Bowlae he rescued from the wreckage of a ship after a violent storm. The two have traveled countless seas together and developed an almost instinctive bond, with Greegr considering Sundowl to be one of his crewmates rather than simply a Mystorian. Despite his playful and theatrical personality, Greegr is an extremely calculating battler who constantly studies his opponents and waits for the perfect opportunity to turn the battlefield against them. To challenge Greegr is to step aboard his ship, and once the battle begins, there is no telling whether you'll be fighting beneath blazing sunlight, pouring rain, freezing snow, or another condition entirely. For Greegr, victory isn't about overpowering his opponent—it's about making sure they are never prepared for the next wave.", quotes:["Sun's up! Let's burn this battle bright!","Eyes down, mateys! The sands are coming!","Look alive, crew! The moon's begun to rain!","Easy, Sundowl... We've been through worse storms than this. Don't you dare give up on me now! We've got one more wave to ride!"], img:"images/characters/greegr.png", stub:false },
+  { id:"C-002", name:"—", role:"Rival", team:"—", bio:"", quotes:[], stub:true },
+  { id:"C-003", name:"—", role:"Faction leader", team:"—", bio:"", quotes:[], stub:true },
+  { id:"C-004", name:"—", role:"Mentor / guide figure", team:"—", bio:"", quotes:[], stub:true },
+  { id:"C-005", name:"—", role:"Gym / arena authority", team:"—", bio:"", quotes:[], stub:true },
+  { id:"C-006", name:"—", role:"Antagonist", team:"—", bio:"", quotes:[], stub:true },
+];
+
+function renderTeams(list){
+  document.getElementById("team-grid").innerHTML = list.map(t => `
+    <div class="team-card" style="--team-color:${t.color || 'var(--parchment-dim-2)'};">
+      <div class="sw-row"><span class="sw"></span><h3>${t.stub ? "Unnamed faction" : t.name}</h3></div>
+      ${t.motto ? `<span class="motto">"${t.motto}"</span>` : ""}
+      <p class="${t.desc ? '' : 'stub'}">${t.desc || "No lore logged yet."}</p>
+    </div>
+  `).join("");
+}
+renderTeams(TEAMS);
+
+/* Renders a character's picture, for both the cast card and the profile
+   page. If the character has an `img` field, that image is shown (falling
+   back to the initial on a load error). Otherwise it's just the initial. */
+function charArt(c){
+  if (c.img) {
+    return `<img src="${c.img}" alt="${c.stub ? 'Unnamed character' : c.name}" onerror="imgFallback(this)">`;
+  }
+  return `<span class="initial">${c.stub ? "?" : c.name.charAt(0).toUpperCase()}</span>`;
+}
+
+function teamOf(name){
+  return TEAMS.find(t => t.name === name);
+}
+
+function renderCharacters(list){
+  document.getElementById("character-grid").innerHTML = list.map(c => `
+    <div class="cast-card" data-idx="${CHARACTERS.indexOf(c)}" tabindex="0" role="button"
+         aria-label="View profile for ${c.stub ? 'unnamed character ' + c.id : c.name}"
+         data-name="${c.name.toLowerCase()}" data-role="${c.role.toLowerCase()}" data-team="${c.team.toLowerCase()}">
+      <div class="avatar">${charArt(c)}</div>
+      <span class="num">${c.id}</span>
+      <h3>${c.stub ? "Unnamed character" : c.name}</h3>
+      <span class="role">${c.role}${c.team && c.team !== "—" ? " · " + c.team : ""}</span>
+      <p class="${c.bio ? '' : 'stub'}">${c.bio || "No bio logged yet."}</p>
+      <span class="tap-note">click for full profile →</span>
+    </div>
+  `).join("");
+  document.getElementById("character-count").textContent = `${list.length} entries shown`;
+}
+renderCharacters(CHARACTERS);
+wireSearch("character-search", "#character-grid .cast-card", el => el.dataset.name + " " + el.dataset.role + " " + el.dataset.team);
+
+/* ---------------- character profile page ---------------- */
+
+function openCharacterPage(idx){
+  const c = CHARACTERS[idx];
+  if (!c) return;
+
+  document.getElementById("cp-art").innerHTML = charArt(c);
+  document.getElementById("cp-num").textContent = c.id;
+  document.getElementById("cp-name").textContent = c.stub ? "Unnamed character" : c.name;
+  document.getElementById("cp-role").textContent = c.role;
+
+  const team = teamOf(c.team);
+  document.getElementById("cp-team-chip").innerHTML = (c.team && c.team !== "—")
+    ? `<span class="team-chip" style="--team-color:${team ? team.color : 'var(--parchment-dim-2)'};"><span class="dot"></span>${c.team}</span>`
+    : `<span class="team-chip"><span class="dot"></span>Independent / unaffiliated</span>`;
+
+  document.getElementById("cp-quotes").innerHTML = (c.quotes && c.quotes.length)
+    ? c.quotes.map(q => `<div class="char-quote">"${q}"</div>`).join("")
+    : `<p class="stub">No quotes logged yet.</p>`;
+
+  document.getElementById("cp-bio").innerHTML = c.bio || `<span class="stub">No biography written yet.</span>`;
+  document.getElementById("cp-bio").className = c.bio ? "" : "stub";
+
+  const page = document.getElementById("character-page");
+  page.classList.add("open");
+  page.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+  page.scrollTop = 0;
+  document.getElementById("character-page-close").focus();
+}
+
+function closeCharacterPage(){
+  const page = document.getElementById("character-page");
+  page.classList.remove("open");
+  page.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+}
+
+document.getElementById("character-grid").addEventListener("click", (e) => {
+  const card = e.target.closest(".cast-card");
+  if (card) openCharacterPage(Number(card.dataset.idx));
+});
+document.getElementById("character-grid").addEventListener("keydown", (e) => {
+  if (e.key !== "Enter" && e.key !== " ") return;
+  const card = e.target.closest(".cast-card");
+  if (card){ e.preventDefault(); openCharacterPage(Number(card.dataset.idx)); }
+});
+document.getElementById("character-page-close").addEventListener("click", closeCharacterPage);
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closeCharacterPage();
+});
+
+/* character page's own type strip, matching the rest of the guide */
+document.querySelectorAll(".char-page-strip").forEach(strip => {
+  strip.innerHTML = TYPES.concat([ANOMALY]).map(t => `<span style="background:var(--t-${t.key});"></span>`).join("");
+});
 
 /* ---------------- scroll-spy nav ---------------- */
 const navLinks = Array.from(document.querySelectorAll("#side-nav a"));
