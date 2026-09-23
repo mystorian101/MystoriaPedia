@@ -526,7 +526,10 @@ table.chart th.rowhead.hl, table.chart th.vert.hl{ color: var(--accent); }
 .cast-card .num{ font-family: var(--mono); font-size:.72rem; color: var(--parchment-dim-2); }
 .cast-card h3{ font-family: var(--serif); margin: 7px 0 6px; font-size:1.12rem; }
 .cast-card .role{ display:block; font-family: var(--mono); font-size:.72rem; color: var(--accent-dim); margin-bottom:11px; }
-.cast-card p{ margin:0; font-size:.85rem; color: var(--parchment-dim); }
+.cast-card p{
+  margin:0; font-size:.85rem; color: var(--parchment-dim); line-height:1.55;
+  display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden;
+}
 .cast-card p.stub{ font-style:italic; color: var(--parchment-dim-2); }
 .cast-card{ cursor:pointer; transition: border-color .15s ease, background-color .15s ease; }
 .cast-card:hover{ border-top-color: var(--accent-dim); background: var(--ink-3); }
@@ -576,6 +579,23 @@ table.chart th.rowhead.hl, table.chart th.vert.hl{ color: var(--accent); }
 }
 .char-page-head .team-chip .dot{ width:9px; height:9px; border-radius:50%; background: var(--team-color, var(--parchment-dim-2)); }
 
+.cp-stat-box{
+  display:grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 18px 28px; margin-bottom:38px; max-width:680px;
+  padding: 18px 22px; background: var(--ink-2); border:1px solid var(--line); border-radius: var(--radius);
+}
+.cp-stat-box .stat b{
+  display:block; font-family:var(--mono); font-size:.68rem; letter-spacing:.03em;
+  color: var(--parchment-dim-2); margin-bottom:5px; text-transform:uppercase;
+}
+.cp-stat-box .stat span{ font-size:.9rem; color: var(--parchment); }
+.cp-stat-box .stat span.stub{ font-style:italic; color: var(--parchment-dim-2); }
+.cp-stat-box .stat span.status-dot{ display:inline-flex; align-items:center; gap:7px; }
+.cp-stat-box .stat span.status-dot::before{
+  content:""; width:9px; height:9px; border-radius:50%; flex:none;
+  background: var(--status-color, var(--parchment-dim-2));
+}
+
 .char-page-section{ margin-bottom:38px; max-width:680px; }
 .char-page-section h4{
   font-family:var(--mono); font-size:.73rem; color:var(--accent-dim);
@@ -587,6 +607,17 @@ table.chart th.rowhead.hl, table.chart th.vert.hl{ color: var(--accent); }
 }
 .char-page-section p{ color:var(--parchment-dim); font-size:.95rem; line-height:1.75; margin:0; }
 .char-page-section p.stub{ font-style:italic; color:var(--parchment-dim-2); }
+
+.cp-designs-grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap:16px; }
+.cp-design-item{ text-align:center; }
+.cp-design-item .thumb{
+  aspect-ratio:1; border-radius:var(--radius); overflow:hidden;
+  background: var(--ink-3); border:1px solid var(--line);
+  display:flex; align-items:center; justify-content:center; margin-bottom:8px;
+}
+.cp-design-item .thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+.cp-design-item .thumb .initial{ font-family:var(--serif); font-size:2rem; color:var(--parchment-dim-2); }
+.cp-design-item .label{ font-family:var(--mono); font-size:.72rem; color:var(--parchment-dim); }
 
 @media (max-width: 880px){
   .char-page-inner{ padding: 24px 20px 80px; }
@@ -1089,6 +1120,7 @@ footer.page-foot{
         <div class="chips" id="cp-team-chip"></div>
       </div>
     </div>
+    <div class="cp-stat-box" id="cp-stats"></div>
     <div class="char-page-section">
       <h4>QUOTES</h4>
       <div id="cp-quotes"></div>
@@ -1096,6 +1128,10 @@ footer.page-foot{
     <div class="char-page-section">
       <h4>BIOGRAPHY / LORE</h4>
       <p id="cp-bio"></p>
+    </div>
+    <div class="char-page-section" style="max-width:none;">
+      <h4>OTHER DESIGNS</h4>
+      <div class="cp-designs-grid" id="cp-designs"></div>
     </div>
   </div>
 </div>
@@ -1460,15 +1496,39 @@ const TEAMS = [
 // short lines said by the character; `bio` is the longer lore writeup. Give
 // a character an `img` field (e.g. "images/characters/rival.png") to show a
 // real portrait on their card and profile page — otherwise it falls back to
-// an initial-letter placeholder.
+// an initial-letter placeholder. `designs` is a list of alternate looks
+// (alt outfits, past forms, concept art, etc) — each one is
+// { img:"images/characters/whatever.png", label:"Winter outfit" }.
+// `age`, `gender`, `base` (their home base / base of operations), and
+// `relatives` are short one-line stats shown in a box near the top of the
+// profile page — leave any of them "" to show as not-yet-decided. `status`
+// goes in that same box and should be exactly "alive", "deceased", or ""
+// for not-yet-decided — it controls the dot colour next to the word.
+
 const CHARACTERS = [
+
   { id:"C-001", name:"Greegr", role:"Elite Four", team:"Trainers",
-    bio:"Greegr is a legendary pirate captain and the fourth member of the Elite Four, known throughout the region as one of its most dangerous trainers and the second strongest trainer in the region. Having spent most of his life sailing across unpredictable seas, Greegr learned to embrace the chaos of nature rather than fear it, eventually developing a unique battling style centered around controlling the weather. Rather than specializing in a single weather condition, Greegr constantly changes the battlefield to whatever weather benefits him most, forcing his opponents to adapt to his ever-changing strategies. His philosophy is simple: a battle is just another sea, and the captain who controls the weather controls the voyage. Greegr is rarely seen without his trusted first mate, Len, who has sailed alongside him for years and acts as both his closest companion and the practical voice that keeps his reckless ideas in check. Greegr's closest Mystorian is Sundowl, an Ice/Fairy-type Mystorian that evolved from a Bowlae he rescued from the wreckage of a ship after a violent storm. The two have traveled countless seas together and developed an almost instinctive bond, with Greegr considering Sundowl to be one of his crewmates rather than simply a Mystorian. Despite his playful and theatrical personality, Greegr is an extremely calculating battler who constantly studies his opponents and waits for the perfect opportunity to turn the battlefield against them. To challenge Greegr is to step aboard his ship, and once the battle begins, there is no telling whether you'll be fighting beneath blazing sunlight, pouring rain, freezing snow, or another condition entirely. For Greegr, victory isn't about overpowering his opponent—it's about making sure they are never prepared for the next wave.", quotes:["Sun's up! Let's burn this battle bright!","Eyes down, mateys! The sands are coming!","Look alive, crew! The moon's begun to rain!","Easy, Sundowl... We've been through worse storms than this. Don't you dare give up on me now! We've got one more wave to ride!"], img:"images/characters/greegr.png", stub:false },
-  { id:"C-002", name:"—", role:"Rival", team:"—", bio:"", quotes:[], stub:true },
-  { id:"C-003", name:"—", role:"Faction leader", team:"—", bio:"", quotes:[], stub:true },
-  { id:"C-004", name:"—", role:"Mentor / guide figure", team:"—", bio:"", quotes:[], stub:true },
-  { id:"C-005", name:"—", role:"Gym / arena authority", team:"—", bio:"", quotes:[], stub:true },
-  { id:"C-006", name:"—", role:"Antagonist", team:"—", bio:"", quotes:[], stub:true },
+    age:"220", gender:"Male", base:"Mystorian Pantheon", relatives:"(Unknown Mom) (Unknown Dad) Len[Adoptive Son]", status:"alive",
+    bio:"Greegr is a legendary pirate captain and the fourth member of the Elite Four, known throughout the region as one of its most dangerous trainers and the second strongest trainer in the region. Having spent most of his life sailing across unpredictable seas, Greegr learned to embrace the chaos of nature rather than fear it, eventually developing a unique battling style centered around controlling the weather. Rather than specializing in a single weather condition, Greegr constantly changes the battlefield to whatever weather benefits him most, forcing his opponents to adapt to his ever-changing strategies. His philosophy is simple: a battle is just another sea, and the captain who controls the weather controls the voyage. Greegr is rarely seen without his trusted first mate, Len, who has sailed alongside him for years and acts as both his closest companion and the practical voice that keeps his reckless ideas in check. Greegr's closest Mystorian is Sundowl, an Ice/Fairy-type Mystorian that evolved from a Bowlae he rescued from the wreckage of a ship after a violent storm. The two have traveled countless seas together and developed an almost instinctive bond, with Greegr considering Sundowl to be one of his crewmates rather than simply a Mystorian. Despite his playful and theatrical personality, Greegr is an extremely calculating battler who constantly studies his opponents and waits for the perfect opportunity to turn the battlefield against them. To challenge Greegr is to step aboard his ship, and once the battle begins, there is no telling whether you'll be fighting beneath blazing sunlight, pouring rain, freezing snow, or another condition entirely. For Greegr, victory isn't about overpowering his opponent—it's about making sure they are never prepared for the next wave.", quotes:["Sun's up! Let's burn this battle bright!","Eyes down, mateys! The sands are coming!","Look alive, crew! The moon's begun to rain!","Easy, Sundowl... We've been through worse storms than this. Don't you dare give up on me now! We've got one more wave to ride!"],
+    img:"images/characters/greegr.png", designs:[{ img:"images/characters/greegr-past.png", label:"Past Greegr"},], stub:false },
+
+  { id:"C-002", name:"Len Gates", role:"First Mate", team:"Trainers",
+    age:"11(Flashback) - 19(Current) - 160(Future)", gender:"Male", base:"Sunheaven Bay", relatives:"Greegr(Adoptive Father)", status:"Alive",
+    bio:"Len is the fiercely loyal first mate of the legendary pirate captain Greegr, though their relationship began long before Len ever knew the truth about his captain. As a young boy, Len was taken under Greegr's wing after being separated from the family he never truly got to know, eventually coming to see the eccentric pirate not simply as his captain, but as the father he never had. Despite his young age, Len quickly developed an unusual talent for Steel-Type Mystorians, particularly those with a nautical or pirate-like nature. His first companions, Honee and Krillmour, accompanied him from the beginning of his journey, with Krillmour eventually evolving into his trusted ace, Swordkrill. Greegr became Len's mentor, teaching him how to sail, battle, and most importantly, how to avoid letting the past dictate his future. On Len's eleventh birthday, Greegr finally revealed the truth behind his seemingly endless youth: he had been alive for nearly two centuries, had been blessed by the mysterious Cardinals, and was one of the rare individuals chosen to protect the world for generations to come. Though Len initially struggled to comprehend the revelation, Greegr's promise that he would always be there for him became the foundation of their bond. Years later, Len would become Greegr's first mate and a formidable Steel-Type specialist in his own right, sailing alongside the very man who had once given him a home.", quotes:[], img:"images/characters/len.png", designs:[{ img:"images/characters/len-future.png", label:"Future Len"},{ img:"images/characters/len-past.png", label:"Past Len"},], stub:false },
+
+
+
+  { id:"C-003", name:"B.L.E.C.K", role:"Mystorian Prodigy", team:"Professor", age:"???", gender:"Male", base:"Sunhaven Labratory", relatives:"???", status:"Alive",
+    bio:"Professor Blumiere, more commonly known by his mysterious academic title Professor B.L.E.C.K., is the reigning Champion of the Mystoria Region and widely regarded as the strongest Mystorian trainer alive. Unlike most Champions who dedicate themselves solely to battling, Blumiere is first and foremost a researcher, historian, and professor who has devoted his life to understanding the strange phenomenon slowly overtaking Mystoria. Long ago, Blumiere was chosen by the Four Cardinals, receiving a blessing that granted him supernatural abilities comparable to those possessed by the members of the Elite Four. However, his blessing was different from theirs. Alongside his immense battle prowess, Blumiere was granted the ability to move freely through time, allowing him to travel into both the distant past and possible futures at will. Rather than using this power for personal gain, Blumiere has spent years secretly traveling through different eras to study Mystoria's history firsthand. His research has led him to a terrifying conclusion: Mystoria is slowly regressing into a prehistoric state. Ancient creatures, forgotten environments, and remnants of a world thought to have disappeared forever are beginning to return, and Blumiere believes that the process will eventually become impossible to stop. Because of this, he has taken on a responsibility far greater than simply protecting his title as Champion. He travels through time to study the creatures and battles of eras that modern trainers could never experience, documenting everything he learns so that the next generation will be prepared for the conflicts that are coming. His unusual appearance, masked face, and secretive personality have made him something of an enigma among the people of Mystoria. Even his students and fellow researchers know very little about what he does when he disappears for weeks at a time. Rumors claim that Professor B.L.E.C.K. has witnessed civilizations that no longer exist, fought Mystorians that have been extinct for thousands of years, and even encountered events that have yet to happen. Blumiere never confirms or denies these stories. He simply tells those who ask that history is much less predictable when you have the privilege of visiting it.' Despite his position as Champion, Blumiere rarely reveals the entirety of his team. Some believe that he deliberately keeps his strongest Mystorians hidden because revealing them would expose how much he has learned through his travels. One creature that has been publicly documented alongside him, however, is Seasulion, the final evolution of Aqeal, a starter Mystorian originating from another region. Their appearance together during the 'Showdown! Corruption Strikes!' arc proved that Blumiere's research extends far beyond Mystoria itself. To the public, Blumiere is a Champion. To his students, he is a professor. To historians, he is a living anomaly. But to Blumiere himself, he is simply a man trying to make sure the present survives what is coming.", quotes:["People assume seeing the future makes everything easier. It doesn't. It simply gives you more things to worry about.","The Elite Four were given power to protect the present. I was given power to understand what comes after it.","You have skill. But skill without experience is simply another weakness."], img:"images/characters/bleck.png", designs:[{img:"images/characters/bleck-casual.png", label:"Casual Wear"}], stub:false },
+
+
+
+
+  { id:"C-004", name:"Rosalyn Risodae", role:"Elite Four", team:"Trainers", age:"164", gender:"Female", base:"Mystorian Pantheon", relatives:"Azalea(Mom)", status:"Alive",
+    bio:"Rosalyn is the third member of the Elite Four, a legendary dancer whose movements in battle are said to be just as captivating as the Mystorians she commands, but beneath her graceful appearance lies a woman who has lived through more than a century and a half of history. Born into the prestigious Risodae family, Rosalyn was raised from childhood to become the perfect lady, spending her youth buried beneath elaborate dresses, etiquette lessons, and expectations that left little room for her own desires. She hated every second of it, longing instead to run outside, play with the other children, and most of all, dance. Her mother, Azalea, initially insisted that such things were distractions from her duties, but after seeing how deeply the expectations were hurting her daughter, she promised Rosalyn that once her training was complete, she would support whatever path her daughter chose. Rosalyn held onto those words for the rest of her life. Tragically, Azalea passed away before Rosalyn could fully escape the life that had been planned for her, leaving Rosalyn standing before her mother's grave with flowers in her hands and a promise on her lips: 'I'll make you proud.' Rather than abandoning her family's teachings, Rosalyn transformed them into something entirely her own. She took the grace, discipline, posture, and precision she had been forced to learn and turned them into dance, eventually discovering that battling with Mystorians could become a performance unlike anything the region had seen. Her connection with Hophat became especially important, eventually allowing her to battle alongside both of its divergent evolutions, Hartric and Lagocian, whom she affectionately calls her 'dance partners.' At some point during her long life, Rosalyn was blessed by one of the Cardinals, granting her an unnaturally long lifespan and causing her to age far more slowly than an ordinary human. While this blessing allowed her to remain active for generations, it also meant watching countless people she loved grow old and pass away while she remained nearly unchanged. Rosalyn eventually became one of the region's most renowned trainers, and after decades upon decades of refinement, she earned her place among the Elite Four as their third member. Despite being over 160 years old, Rosalyn rarely speaks about her age unless asked, preferring to joke that she is simply 'very committed to staying young.' Those who battle her quickly learn that her cheerful demeanor is not evidence of inexperience; every step she takes, every movement of her Mystorians, and every command she gives has been refined over an extraordinary lifetime. To Rosalyn, battling isn't simply about overpowering an opponent—it is about rhythm, timing, synchronization, and expression. She treats every battle like a dance, with herself and her Mystorians moving as one. Her greatest philosophy is that a battle should never feel like two sides fighting—it should feel like two rhythms colliding.", quotes:["Careful now... you're making me take you seriously.","Hartric, Lagocian, follow my lead! Let's give them a performance they'll never forget!"], img:"images/characters/rosalyn.png", designs:[], stub:false },
+
+  { id:"C-005", name:"—", role:"Gym / arena authority", team:"—", age:"", gender:"", base:"", relatives:"", status:"", bio:"", quotes:[], designs:[], stub:true },
+  { id:"C-006", name:"—", role:"Antagonist", team:"—", age:"", gender:"", base:"", relatives:"", status:"", bio:"", quotes:[], designs:[], stub:true },
 ];
 
 function renderTeams(list){
@@ -1530,12 +1590,30 @@ function openCharacterPage(idx){
     ? `<span class="team-chip" style="--team-color:${team ? team.color : 'var(--parchment-dim-2)'};"><span class="dot"></span>${c.team}</span>`
     : `<span class="team-chip"><span class="dot"></span>Independent / unaffiliated</span>`;
 
+  const stat = (label, val) => `<div class="stat"><b>${label}</b><span class="${val ? '' : 'stub'}">${val || "Unknown"}</span></div>`;
+  const statusColor = c.status === "alive" ? "var(--t-plant)" : c.status === "deceased" ? "var(--t-ghost)" : "var(--parchment-dim-2)";
+  const statusLabel = c.status === "alive" ? "Alive" : c.status === "deceased" ? "Deceased" : "";
+  const statusStat = `<div class="stat" style="--status-color:${statusColor};"><b>Status</b><span class="${statusLabel ? 'status-dot' : 'stub'}">${statusLabel || "Unknown"}</span></div>`;
+  document.getElementById("cp-stats").innerHTML =
+    stat("Age", c.age) + stat("Gender", c.gender) + stat("Base of operations", c.base) + stat("Relatives", c.relatives) + statusStat;
+
   document.getElementById("cp-quotes").innerHTML = (c.quotes && c.quotes.length)
     ? c.quotes.map(q => `<div class="char-quote">"${q}"</div>`).join("")
     : `<p class="stub">No quotes logged yet.</p>`;
 
   document.getElementById("cp-bio").innerHTML = c.bio || `<span class="stub">No biography written yet.</span>`;
   document.getElementById("cp-bio").className = c.bio ? "" : "stub";
+
+  document.getElementById("cp-designs").innerHTML = (c.designs && c.designs.length)
+    ? c.designs.map(d => `
+        <div class="cp-design-item">
+          <div class="thumb">${d.img
+            ? `<img src="${d.img}" alt="${d.label || 'alternate design'}" onerror="imgFallback(this)">`
+            : `<span class="initial">?</span>`}</div>
+          <span class="label">${d.label || ""}</span>
+        </div>
+      `).join("")
+    : `<p class="stub">No alternate designs logged yet.</p>`;
 
   const page = document.getElementById("character-page");
   page.classList.add("open");
